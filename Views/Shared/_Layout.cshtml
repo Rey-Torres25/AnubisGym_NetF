@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Mi aplicación ASP.NET</title>
+    @Styles.Render()
+    <link href='https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <link href="@Url.Content("~/Content/Sidebar.css")" rel="stylesheet" type="text/css" />
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content/fontawesome")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    @*<div class="col-md-2 CustomLeftnavbar">
+            @{Html.RenderPartial("~/Views/Shared/_Sidebar.cshtml");}
+        </div>*@
+
+
+    <div class="sidebar">
+        <div class="logo-details">
+            <i class="iconify me-2" data-icon="cib:dot-net" style="color: white;" data-width="50" data-height="100"></i>
+            <div class="logo_name">Gym Anubis</div>
+            <i class='bx bx-menu' id="btn"></i>
+        </div>
+        <ul class="nav-list">
+            <li>
+                <a href="@Url.Action("Index", "Home")">
+                    <i class='bx bx-grid-alt'></i>
+                    <span class="links_name">Home</span>
+                </a>
+                <span class="tooltip">Dashboard</span>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Productos")">
+                    <i class='bx bx-cart-alt'></i>
+                    <span class="links_name">Productos</span>
+                </a>
+                <span class="tooltip">Productos</span>
+            </li>
+            <li>
+                <a href="@Url.Action("RegistroCliente", "Registros")">
+                    <i class='bx bx-user'></i>
+                    <span class="links_name">Clientes</span>
+                </a>
+                <span class="tooltip">Clientes</span>
+            </li>
+            <li>
+                <a href="@Url.Action("RegistroEmpleado", "Registros")">
+                    <i class='bx bx-id-card'></i>
+                    <span class="links_name">Empleados</span>
+                </a>
+                <span class="tooltip">Empleados</span>
+            </li>
+            <li>
+                <a href="@Url.Action("RegistroEntrada", "Registros")">
+                    <i class='bx bx-data'></i>
+                    <span class="links_name">Registro de asistencia</span>
+                </a>
+                <span class="tooltip">Registro de asistencia</span>
+            </li>
+            <li>
+                <a href="@Url.Action("RegistroEquipo", "Registros")">
+                    <i class='bx bx-dumbbell'></i>
+                    <span class="links_name">Registro de equipo</span>
+                </a>
+                <span class="tooltip">Registro de equipo</span>
+            </li>
+            <li>
+                <a href="@Url.Action("logoff", "Access")">
+                    <i class='bx bx-log-out'></i>
+                    <span class="links_name">Cerrar Sesion</span>
+                </a>
+                <span class="tooltip">Cerrar Sesion</span>
+            </li>
+        </ul>
+    </div>
+    <section class="home-section">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="container body-content mt-4 mb-2">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="container body-content">
+                @RenderBody()
+            </div>*@
+    </section>
+
+
+
+    <!-- /#sidebar-wrapper -->
+    <!-- Page Content -->
+    @*<div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <a href="#menu-toggle" class="btn btn-default" id="menu-toggle" style="border-color:gray;">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        <br />
+                        <div class="container body-content">
+                            @RenderBody()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+    <script src="https://cdn.jsdelivr.net/npm/gasparesganga-jquery-loading-overlay@2.1.7/dist/loadingoverlay.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.iconify.design/3/3.0.0/iconify.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script>
+        let sidebar = document.querySelector(".sidebar");
+        let closeBtn = document.querySelector("#btn");
+        let searchBtn = document.querySelector(".bx-search");
+
+        closeBtn.addEventListener("click", () => {
+            sidebar.classList.toggle("open");
+            menuBtnChange();//calling the function(optional)
+        });
+
+        searchBtn.addEventListener("click", () => { // Sidebar open when you click on the search iocn
+            sidebar.classList.toggle("open");
+            menuBtnChange(); //calling the function(optional)
+        });
+
+        // following are the code to change sidebar button(optional)
+        function menuBtnChange() {
+            if (sidebar.classList.contains("open")) {
+                closeBtn.classList.replace("bx-menu", "bx-menu-alt-right");//replacing the iocns class
+            } else {
+                closeBtn.classList.replace("bx-menu-alt-right", "bx-menu");//replacing the iocns class
+            }
+        }
+    </script>
+</body>
+</html>

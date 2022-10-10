@@ -1,0 +1,70 @@
+﻿@model List<GymAnubisNetF.Models.TableViewModels.UserTableViewModel>
+@{
+    ViewBag.Title = "RegistroEmpleado";
+}
+
+<div class="container mx-auto text-center" style="width: 400px;">
+    <h3>Registro Empleado</h3>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/RE_Add")'" value="Agregar usuario"/>
+    </div>
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Correo</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Edad</th>
+            <th scope="col"></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var oItem in Model)
+        {
+            <tr>
+                <th scope="row">@oItem.Id</th>
+                <td>@oItem.NombreUsuario</td>
+                <td>@oItem.Correo</td>
+                <td>@oItem.Nombre</td>
+                <td>@oItem.Edad</td>
+                <td>
+                    <input type="button" class="btn btn-primary" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRE/"+oItem.Id)'"/>
+                    <input type="button" class="btn btn-danger" value="Eliminar" onclick="deleteFetch(@oItem.Id);" />
+                </td>
+            </tr>
+         }
+    </tbody>
+</table>
+
+<script>
+    function deleteFetch(id) {
+        url = "@Url.Content("~/Registros/DeleteRE")" + "/" + id;
+
+        Swal.fire({
+            title: '¿Estas seguro de eliminarlo?',
+            text: "No se podra revertir la eleccion",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si, eliminar!',
+            cancelButtonText: 'No, cancelar!',
+        }).then((res) => {
+            if (res) {
+                $.ajax({
+                url: url,
+                type: "POST",
+                    success: function (data) {
+                        document.location.href = "@Url.Content("~/Registros/RegistroEmpleado")"
+                    }
+                });
+            }
+        })
+    }
+</script>
+

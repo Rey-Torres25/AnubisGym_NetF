@@ -1,0 +1,75 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+}
+
+
+@*<div class="container">
+    <div class="row">
+        <form id="formlogin" method="post">
+            <h4 class="text-center">Bienvenido (a)</h4>
+            <div class="col-lg-6 col-lg-offset-3">
+                Usuario
+                <input type="text" name="user" class="form-control">
+                Contraseña
+                <input type="password" name="pass" class="form-control">
+                <input type="submit" class="btn btn-success" value="Entrar">
+            </div>
+        </form>
+    </div>
+</div>*@
+
+<div class="containerLog">
+    <div class="row" style="width: 100%;">
+        <div class="col-lg-6 offset-lg-3">
+            <div class="card text-center" style="padding: 20px;">
+                <h3>Login</h3>
+                <h3 class="text-center">Bienvenido (a)</h3>
+                <form id="formlogin" method="post" style="padding-top: 10px;">
+                    <div class="form-group input-group">
+                        <input type="text" class="form-control mx-auto" name="user" placeholder="Usuario">
+                    </div>
+                   <br />
+                    <div class="form-group input-group" style="text-align: start; ">
+                        <input type="password" class="form-control mx-auto" name="pass" placeholder="Contraseña" >
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary mr-2 mt-2 btn-login" value="Entrar">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+                <!--Con este script se realiza la validacion del inicio de sesión-->
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#formlogin").submit(function (e) {
+                e.preventDefault();
+                    url = "@Url.Content("~/Access/Enter")"
+                    parametros = $(this).serialize();
+                $.post(url, parametros, function (data) {
+                    $.LoadingOverlay("show");
+                        if (data == "1") {
+                            document.location.href = "@Url.Content("~/")";
+                        } else {
+                            Swal.fire({
+                                title: 'Error',
+                                text: data,
+                                icon: 'error',
+                                confirmButtonText: 'Aceptar'
+                            })
+                            $.LoadingOverlay("hide");
+                            //alert(data)
+                        }
+                    })
+            })
+        })
+    </script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+}

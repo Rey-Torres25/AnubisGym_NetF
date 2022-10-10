@@ -1,0 +1,90 @@
+﻿
+@{
+    ViewBag.Title = "RegistroEntrada";
+}
+<div class="container mx-auto text-center" style="width: 400px;">
+    <h2>Registro de asistencia</h2>
+ </div>
+
+<div class="row form-group">
+    @*date picker*@
+    <label for="date" class="col-sm-1 col-form-label">Date</label>
+    <div class="col-sm-4">
+        <div class="input-group date" id="datepicker">
+            <input type="text" class="form-control">
+            <span class="input-group-append">
+                <span class="input-group-text bg-white d-block">
+                    <i class="fa fa-calendar"></i>
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="col-sm-4">
+        <div class="">
+            <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nombre cliente</th>
+            <th scope="col">Estatus</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td>Mark</td>
+            <td>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>--Select--</option>
+                    <option value="1">Presencia</option>
+                    <option value="2">Ausencia</option>
+                </select>
+            </td>
+           
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td>Jacob</td>
+            <td>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>--Select--</option>
+                    <option value="1">Presencia</option>
+                    <option value="2">Ausencia</option>
+                </select>
+            </td>
+       
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>Larry the Bird</td>
+            <td>
+                <select class="form-select" aria-label="Default select example">
+                    <option selected>--Select--</option>
+                    <option value="1">Presencia</option>
+                    <option value="2">Ausencia</option>
+                </select>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#datepicker').datepicker({
+                "format": 'dd/mm/yyyy',
+                "autoclose": true,
+                endDate: "0",
+                startDate: "0",
+                todayHighlight: true,
+
+                
+            }).datepicker("setDate", "0");
+        });
+    </script>
+}
