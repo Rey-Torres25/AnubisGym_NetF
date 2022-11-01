@@ -1,0 +1,59 @@
+﻿@model GymAnubisNetF.Models.ViewModels.ProductoViewModel
+@{
+    ViewBag.Title = "AddProducto";
+}
+
+<div class="container mx-auto text-center" style="width: 400px;">
+    <h2>Agregar producto</h2>
+</div>
+
+<div class="container">
+    <div class="row" style="width: 100%;">
+        <div class="col-md-6 offset-md-3">
+            <div class="card text-center">
+                @using (Html.BeginForm("AddProducto", "Productos", FormMethod.Post, new { role = "form", @class = "d-flex-col justify-content-center align-items-center" }))
+                {
+
+                    @Html.AntiForgeryToken()
+
+                <div class="container">
+                    <div class="form-group mt-1">
+                        @Html.LabelFor(d => d.NombreProd, new { @class = "form-label" })
+                        @Html.TextBoxFor(d => d.NombreProd, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                        <strong>@Html.ValidationMessage("NombreProd", new { @class = "text-danger" })</strong>
+                    </div>
+
+
+                    <div class="form-group mt-1">
+                        @Html.LabelFor(d => d.Stock, new { @class = "form-label" })
+                        @Html.TextBoxFor(d => d.Stock, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                        <strong>@Html.ValidationMessage("Stock", new { @class = "text-danger" })</strong>
+                    </div>
+
+
+                    <div class="form-group mt-1">
+                        @Html.LabelFor(d => d.Precio, new { @class = "form-label" })
+                        @Html.TextBoxFor(d => d.Precio, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                        <strong>@Html.ValidationMessage("Precio", new { @class = "text-danger" })</strong>
+                    </div>
+                        @if (ViewBag.Alert != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show m-2" role="alert">
+                                <strong>Aviso!</strong> @ViewBag.Alert
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+                    <div class="m-2">
+                        <input type="submit" class="btn btn-success" value="Guardar" />
+                    </div>
+                </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
+    }

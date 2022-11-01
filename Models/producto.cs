@@ -12,18 +12,15 @@ namespace GymAnubisNetF.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class user
+    public partial class producto
     {
         public int id { get; set; }
-        public string usuario { get; set; }
         public string nombre { get; set; }
-        public string correo { get; set; }
-        public string password { get; set; }
-        public int edad { get; set; }
+        public int stock { get; set; }
+        public int precio { get; set; }
+        public string fecha_registro { get; set; }
         public int idStatus { get; set; }
-        public Nullable<int> idCompra { get; set; }
     
         public virtual status status { get; set; }
-        public virtual venta_prod venta_prod { get; set; }
     }
 }

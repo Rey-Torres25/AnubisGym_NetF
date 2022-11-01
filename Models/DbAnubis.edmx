@@ -5,6 +5,48 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="AnubisGymNetFModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="edad" Type="int" Nullable="false" />
+          <Property Name="correo" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="telefono" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="direccion" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fecha_registro" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="idStatus" Type="int" Nullable="false" />
+          <Property Name="idCompra" Type="int" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="stock" Type="int" Nullable="false" />
+          <Property Name="precio" Type="int" Nullable="false" />
+          <Property Name="fecha_registro" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="idStatus" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="registro_entrada">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_cliente" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_entrada" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="registro_equipo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="fecha_mantenimiento" Type="date" Nullable="false" />
+          <Property Name="stock" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="status">
           <Key>
             <PropertyRef Name="id" />
@@ -32,10 +74,58 @@
           <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="edad" Type="int" Nullable="false" />
-          <Property Name="idStatus" Type="int" />
+          <Property Name="idStatus" Type="int" Nullable="false" />
+          <Property Name="idCompra" Type="int" />
         </EntityType>
+        <EntityType Name="venta_prod">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cliente" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="producto" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="cantidad" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="precio" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_cliente_status1">
+          <End Role="status" Type="Self.status" Multiplicity="1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="idStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cliente_venta_prod">
+          <End Role="venta_prod" Type="Self.venta_prod" Multiplicity="0..1" />
+          <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta_prod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="idCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_producto_status">
+          <End Role="status" Type="Self.status" Multiplicity="1" />
+          <End Role="producto" Type="Self.producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="idStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_user_status">
-          <End Role="status" Type="Self.status" Multiplicity="0..1" />
+          <End Role="status" Type="Self.status" Multiplicity="1" />
           <End Role="user" Type="Self.user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="status">
@@ -46,12 +136,45 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_user_venta_prod">
+          <End Role="venta_prod" Type="Self.venta_prod" Multiplicity="0..1" />
+          <End Role="user" Type="Self.user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta_prod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="AnubisGymNetFModelStoreContainer">
+          <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registro_entrada" EntityType="Self.registro_entrada" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="registro_equipo" EntityType="Self.registro_equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="venta_prod" EntityType="Self.venta_prod" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_cliente_status1" Association="Self.FK_cliente_status1">
+            <End Role="status" EntitySet="status" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cliente_venta_prod" Association="Self.FK_cliente_venta_prod">
+            <End Role="venta_prod" EntitySet="venta_prod" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_producto_status" Association="Self.FK_producto_status">
+            <End Role="status" EntitySet="status" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
           <AssociationSet Name="FK_user_status" Association="Self.FK_user_status">
             <End Role="status" EntitySet="status" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
+          <AssociationSet Name="FK_user_venta_prod" Association="Self.FK_user_venta_prod">
+            <End Role="venta_prod" EntitySet="venta_prod" />
             <End Role="user" EntitySet="user" />
           </AssociationSet>
         </EntityContainer>
@@ -60,20 +183,88 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AnubisGymNetFModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AnubisGymNetFEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="cliente" EntityType="AnubisGymNetFModel.cliente" />
+          <EntitySet Name="producto" EntityType="AnubisGymNetFModel.producto" />
+          <EntitySet Name="registro_entrada" EntityType="AnubisGymNetFModel.registro_entrada" />
+          <EntitySet Name="registro_equipo" EntityType="AnubisGymNetFModel.registro_equipo" />
           <EntitySet Name="status" EntityType="AnubisGymNetFModel.status" />
           <EntitySet Name="sysdiagrams" EntityType="AnubisGymNetFModel.sysdiagrams" />
           <EntitySet Name="user" EntityType="AnubisGymNetFModel.user" />
+          <EntitySet Name="venta_prod" EntityType="AnubisGymNetFModel.venta_prod" />
+          <AssociationSet Name="FK_cliente_status1" Association="AnubisGymNetFModel.FK_cliente_status1">
+            <End Role="status" EntitySet="status" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_cliente_venta_prod" Association="AnubisGymNetFModel.FK_cliente_venta_prod">
+            <End Role="venta_prod" EntitySet="venta_prod" />
+            <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_producto_status" Association="AnubisGymNetFModel.FK_producto_status">
+            <End Role="status" EntitySet="status" />
+            <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
           <AssociationSet Name="FK_user_status" Association="AnubisGymNetFModel.FK_user_status">
             <End Role="status" EntitySet="status" />
             <End Role="user" EntitySet="user" />
           </AssociationSet>
+          <AssociationSet Name="FK_user_venta_prod" Association="AnubisGymNetFModel.FK_user_venta_prod">
+            <End Role="venta_prod" EntitySet="venta_prod" />
+            <End Role="user" EntitySet="user" />
+          </AssociationSet>
         </EntityContainer>
+        <EntityType Name="cliente">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="edad" Type="Int32" Nullable="false" />
+          <Property Name="correo" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="telefono" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
+          <Property Name="direccion" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idStatus" Type="Int32" Nullable="false" />
+          <Property Name="idCompra" Type="Int32" />
+          <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="cliente" ToRole="status" />
+          <NavigationProperty Name="venta_prod" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="cliente" ToRole="venta_prod" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="stock" Type="Int32" Nullable="false" />
+          <Property Name="precio" Type="Int32" Nullable="false" />
+          <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="idStatus" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_producto_status" FromRole="producto" ToRole="status" />
+        </EntityType>
+        <EntityType Name="registro_entrada">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_cliente" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_entrada" Type="DateTime" Nullable="false" Precision="0" />
+        </EntityType>
+        <EntityType Name="registro_equipo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_mantenimiento" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="stock" Type="Int32" Nullable="false" />
+        </EntityType>
         <EntityType Name="status">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="statusname" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cliente" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="status" ToRole="cliente" />
+          <NavigationProperty Name="producto" Relationship="AnubisGymNetFModel.FK_producto_status" FromRole="status" ToRole="producto" />
           <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_status" FromRole="status" ToRole="user" />
         </EntityType>
         <EntityType Name="sysdiagrams">
@@ -96,11 +287,62 @@
           <Property Name="correo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="password" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="edad" Type="Int32" Nullable="false" />
-          <Property Name="idStatus" Type="Int32" />
+          <Property Name="idStatus" Type="Int32" Nullable="false" />
+          <Property Name="idCompra" Type="Int32" />
           <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_user_status" FromRole="user" ToRole="status" />
+          <NavigationProperty Name="venta_prod" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="user" ToRole="venta_prod" />
         </EntityType>
+        <EntityType Name="venta_prod">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cliente" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="producto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="cantidad" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="precio" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cliente1" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="venta_prod" ToRole="cliente" />
+          <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="venta_prod" ToRole="user" />
+        </EntityType>
+        <Association Name="FK_cliente_status1">
+          <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="1" />
+          <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="idStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_cliente_venta_prod">
+          <End Type="AnubisGymNetFModel.venta_prod" Role="venta_prod" Multiplicity="0..1" />
+          <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta_prod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cliente">
+              <PropertyRef Name="idCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_producto_status">
+          <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="1" />
+          <End Type="AnubisGymNetFModel.producto" Role="producto" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="status">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="producto">
+              <PropertyRef Name="idStatus" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_user_status">
-          <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="0..1" />
+          <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="1" />
           <End Type="AnubisGymNetFModel.user" Role="user" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="status">
@@ -111,12 +353,70 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-      </Schema>
+        <Association Name="FK_user_venta_prod">
+          <End Type="AnubisGymNetFModel.venta_prod" Role="venta_prod" Multiplicity="0..1" />
+          <End Type="AnubisGymNetFModel.user" Role="user" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="venta_prod">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="user">
+              <PropertyRef Name="idCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AnubisGymNetFModelStoreContainer" CdmEntityContainer="AnubisGymNetFEntities">
+          <EntitySetMapping Name="cliente">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.cliente">
+              <MappingFragment StoreEntitySet="cliente">
+                <ScalarProperty Name="idCompra" ColumnName="idCompra" />
+                <ScalarProperty Name="idStatus" ColumnName="idStatus" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="direccion" ColumnName="direccion" />
+                <ScalarProperty Name="telefono" ColumnName="telefono" />
+                <ScalarProperty Name="correo" ColumnName="correo" />
+                <ScalarProperty Name="edad" ColumnName="edad" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="producto">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="idStatus" ColumnName="idStatus" />
+                <ScalarProperty Name="fecha_registro" ColumnName="fecha_registro" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registro_entrada">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.registro_entrada">
+              <MappingFragment StoreEntitySet="registro_entrada">
+                <ScalarProperty Name="fecha_entrada" ColumnName="fecha_entrada" />
+                <ScalarProperty Name="nombre_cliente" ColumnName="nombre_cliente" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="registro_equipo">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.registro_equipo">
+              <MappingFragment StoreEntitySet="registro_equipo">
+                <ScalarProperty Name="stock" ColumnName="stock" />
+                <ScalarProperty Name="fecha_mantenimiento" ColumnName="fecha_mantenimiento" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="status">
             <EntityTypeMapping TypeName="AnubisGymNetFModel.status">
               <MappingFragment StoreEntitySet="status">
@@ -139,12 +439,25 @@
           <EntitySetMapping Name="user">
             <EntityTypeMapping TypeName="AnubisGymNetFModel.user">
               <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="idCompra" ColumnName="idCompra" />
                 <ScalarProperty Name="idStatus" ColumnName="idStatus" />
                 <ScalarProperty Name="edad" ColumnName="edad" />
                 <ScalarProperty Name="password" ColumnName="password" />
                 <ScalarProperty Name="correo" ColumnName="correo" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
                 <ScalarProperty Name="usuario" ColumnName="usuario" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="venta_prod">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.venta_prod">
+              <MappingFragment StoreEntitySet="venta_prod">
+                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="producto" ColumnName="producto" />
+                <ScalarProperty Name="cliente" ColumnName="cliente" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

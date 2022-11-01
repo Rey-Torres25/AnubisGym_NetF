@@ -1,0 +1,64 @@
+﻿@model GymAnubisNetF.Models.ViewModels.EditUserViewModel
+@{
+    ViewBag.Title = "Editar Empleado";
+}
+
+<div class="container text-center" style="width: 400px;">
+    <h2>Editar Empleado</h2>
+ </div>
+    <div class="container">
+        <div class="row" style="width: 100%;">
+            <div class="col-md-6 offset-md-3">
+                <div class="card text-center">
+                    @using (Html.BeginForm("EditRegistroEmpleado", "Registros", FormMethod.Post, new { role = "form", @class = "" }))
+                    {
+                        @Html.HiddenFor(d => d.Id)
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationMessage("Error", new { @class = "text-danger" })
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.Nombre)
+                            @Html.TextBoxFor(d => d.Nombre, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("Nombre", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.NombreUsuario)
+                            @Html.TextBoxFor(d => d.NombreUsuario, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("NombreUsuario", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.Correo)
+                            @Html.TextBoxFor(d => d.Correo, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("Correo", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.Edad)
+                            @Html.TextBoxFor(d => d.Edad, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("Edad", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.Password)
+                            @Html.PasswordFor(d => d.Password, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("Password", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="form-group mt-1">
+                            @Html.LabelFor(d => d.ConfirmPassword)
+                            @Html.PasswordFor(d => d.ConfirmPassword, new { @class = "form-control mx-auto", style = "Text-align:Center" })
+                            @Html.ValidationMessage("ConfirmPassword", new { @class = "text-danger" })
+                        </div>
+
+                        <div class="m-1">
+                            <input type="submit" class="btn btn-success" value="Guardar" />
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+

@@ -1,5 +1,47 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="AnubisGymNetFModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="cliente">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="edad" Type="int" Nullable="false" />
+    <Property Name="correo" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="telefono" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="direccion" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="fecha_registro" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="idStatus" Type="int" Nullable="false" />
+    <Property Name="idCompra" Type="int" />
+  </EntityType>
+  <EntityType Name="producto">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="stock" Type="int" Nullable="false" />
+    <Property Name="precio" Type="int" Nullable="false" />
+    <Property Name="fecha_registro" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="idStatus" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="registro_entrada">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre_cliente" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="fecha_entrada" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="registro_equipo">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="fecha_mantenimiento" Type="date" Nullable="false" />
+    <Property Name="stock" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="status">
     <Key>
       <PropertyRef Name="id" />
@@ -27,10 +69,58 @@
     <Property Name="correo" Type="varchar" MaxLength="50" Nullable="false" />
     <Property Name="password" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="edad" Type="int" Nullable="false" />
-    <Property Name="idStatus" Type="int" />
+    <Property Name="idStatus" Type="int" Nullable="false" />
+    <Property Name="idCompra" Type="int" />
   </EntityType>
+  <EntityType Name="venta_prod">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="cliente" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="producto" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="cantidad" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="precio" Type="varchar" MaxLength="100" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_cliente_status1">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="cliente">
+        <PropertyRef Name="idStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_cliente_venta_prod">
+    <End Role="venta_prod" Type="Self.venta_prod" Multiplicity="0..1" />
+    <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="venta_prod">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="cliente">
+        <PropertyRef Name="idCompra" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_producto_status">
+    <End Role="status" Type="Self.status" Multiplicity="1" />
+    <End Role="producto" Type="Self.producto" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="status">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="producto">
+        <PropertyRef Name="idStatus" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_user_status">
-    <End Role="status" Type="Self.status" Multiplicity="0..1" />
+    <End Role="status" Type="Self.status" Multiplicity="1" />
     <End Role="user" Type="Self.user" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="status">
@@ -41,12 +131,45 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_user_venta_prod">
+    <End Role="venta_prod" Type="Self.venta_prod" Multiplicity="0..1" />
+    <End Role="user" Type="Self.user" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="venta_prod">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="user">
+        <PropertyRef Name="idCompra" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <EntityContainer Name="AnubisGymNetFModelStoreContainer">
+    <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="registro_entrada" EntityType="Self.registro_entrada" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="registro_equipo" EntityType="Self.registro_equipo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="venta_prod" EntityType="Self.venta_prod" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_cliente_status1" Association="Self.FK_cliente_status1">
+      <End Role="status" EntitySet="status" />
+      <End Role="cliente" EntitySet="cliente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_cliente_venta_prod" Association="Self.FK_cliente_venta_prod">
+      <End Role="venta_prod" EntitySet="venta_prod" />
+      <End Role="cliente" EntitySet="cliente" />
+    </AssociationSet>
+    <AssociationSet Name="FK_producto_status" Association="Self.FK_producto_status">
+      <End Role="status" EntitySet="status" />
+      <End Role="producto" EntitySet="producto" />
+    </AssociationSet>
     <AssociationSet Name="FK_user_status" Association="Self.FK_user_status">
       <End Role="status" EntitySet="status" />
+      <End Role="user" EntitySet="user" />
+    </AssociationSet>
+    <AssociationSet Name="FK_user_venta_prod" Association="Self.FK_user_venta_prod">
+      <End Role="venta_prod" EntitySet="venta_prod" />
       <End Role="user" EntitySet="user" />
     </AssociationSet>
   </EntityContainer>

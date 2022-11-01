@@ -2,6 +2,8 @@
 body {
     /*padding-top: 50px;*/
     /*padding-bottom: 20px;*/
+    /*background: #e4e9f7;*/
+
 }
 
 /* Set padding to keep content from hitting the edges */
@@ -33,9 +35,14 @@ textarea {
     min-height: 100vh;
 }
 
-h3 {
-    font-family: 'Rowdies', cursive;
+.containerDash {
+    display: flex;
+    position: relative;
+    justify-content: center;
+    align-items: center;
+    min-height: 100%;
 }
+
 
 .btn-login {
     background-color: royalblue;

@@ -4,11 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a7f52dc0634143388596535ae9dafe47" Name="Diagram1">
-        <EntityTypeShape EntityType="AnubisGymNetFModel.status" Width="1.5" PointX="0.75" PointY="1.375" />
-        <EntityTypeShape EntityType="AnubisGymNetFModel.sysdiagrams" Width="1.5" PointX="0.75" PointY="4.75" />
-        <EntityTypeShape EntityType="AnubisGymNetFModel.user" Width="1.5" PointX="3" PointY="1" />
+      <Diagram DiagramId="a7f52dc0634143388596535ae9dafe47" Name="Diagram1" ZoomLevel="74">
+        <EntityTypeShape EntityType="AnubisGymNetFModel.cliente" Width="1.5" PointX="3" PointY="4.75" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.producto" Width="1.5" PointX="8.625" PointY="6.125" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.registro_entrada" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.registro_equipo" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.status" Width="1.5" PointX="0.75" PointY="5.25" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.sysdiagrams" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.user" Width="1.5" PointX="6" PointY="4.875" />
+        <EntityTypeShape EntityType="AnubisGymNetFModel.venta_prod" Width="1.5" PointX="0.75" PointY="1" />
+        <AssociationConnector Association="AnubisGymNetFModel.FK_cliente_status1" />
+        <AssociationConnector Association="AnubisGymNetFModel.FK_cliente_venta_prod" />
+        <AssociationConnector Association="AnubisGymNetFModel.FK_producto_status" />
         <AssociationConnector Association="AnubisGymNetFModel.FK_user_status" />
+        <AssociationConnector Association="AnubisGymNetFModel.FK_user_venta_prod" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

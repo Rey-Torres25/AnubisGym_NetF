@@ -1,18 +1,14 @@
-﻿@model List<GymAnubisNetF.Models.TableViewModels.ClienteTableViewModel>
+﻿@model List<GymAnubisNetF.Models.TableViewModels.ProductoTableViewModel>
 @{
-    ViewBag.Title = "Registro Cliente";
+    ViewBag.Title = "Inventario";
 }
 
 <div class="container mx-auto text-center" style="width: 400px;">
-    <h2>Clientes</h2>
+    <h2>Inventario</h2>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/AddRegistroCliente")'" value="Agregar cliente" />
-    </div>
-</div>
+
 <div class="container m-2">
-    <div class="row-cols-2">
+    <div class="row">
         <div class="col-sm-4 m-1">
             Fecha de inicio: <input type="text" id="min" name="min">
         </div>
@@ -21,16 +17,15 @@
         </div>
     </div>
     <div class="container mt-4">
-        <table id="Lista_tabla" class="table table-bordered table-striped table-hover text-center" style="width:100%">
+        <table id="Lista_tabla" class="table table-bordered table-striped table-hover" style="width:100%">
             <thead>
                 <tr>
-
                     <th>Id</th>
-                    <th>Cliente</th>
-                    <th>Correo</th>
-                    <th>Fecha del registro</th>
+                    <th>Nombre</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Fecha de registro</th>
                     <th></th>
-
                 </tr>
             </thead>
             <tbody>
@@ -38,21 +33,22 @@
                 {
                     <tr>
                         <th>@oItem.Id</th>
-                        <td>@oItem.Nombre</td>
-                        <td>@oItem.Correo</td>
+                        <td>@oItem.NombreProd</td>
+                        <td>@oItem.Stock</td>
+                        <td>@oItem.Precio</td>
                         <td>@oItem.FechaRegistro</td>
                         <td>
                             <div class="container">
-                                <input type="button" class="btn btn-primary m-1" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRegistroCliente/"+oItem.Id)'" />
+                                <input type="button" class="btn btn-primary m-1" value="Editar" onclick="document.location.href = '@Url.Content("~/Productos/EditProducto/"+oItem.Id)'" />
                                 <input type="button" class="btn btn-danger m-1" value="Eliminar" onclick="deleteFetch(@oItem.Id);" />
                             </div>
-
                         </td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
 </div>
 
 @section scripts{
@@ -78,7 +74,7 @@
             function (settings, data, dataIndex) {
                 var min = minDate.val();
                 var max = maxDate.val();
-                var date = new Date(data[3]); // use data for the date column
+                var date = new Date(data[4]); // use data for the date column
 
                 if (
                     (min === null && max === null) ||
@@ -92,7 +88,6 @@
             }
         );
         $(document).ready(function () {
-
             minDate = new DateTime($('#min'), {
                 format: 'YYYY-MM-DD'
             });
@@ -106,9 +101,8 @@
                 responsive: "true",
                 dom: 'Blfrtip',
                 //columnDefs: [{
-                //    targets: 3,
-                //    render: $.fn.dataTable.render.moment('YYY-MM-DD', 'YYYY-MM-DD')
-                ////    render: $.fn.dataTable.render.moment('DD-MM-yyyy HH:mm:ss', 'YYYY-MM-DD')
+                //    render: $.fn.dataTable.render.moment('yyyy-MM-DD HH:mm:ss.SSS', 'YYYY-MM-DD'),
+                //    targets: 4
                 //}],
                 buttons: [
                     //'csv', 'excel', 'pdf',
@@ -148,10 +142,10 @@
     <script>
     function deleteFetch(id) {
         if (confirm("¿Estas seguro de eliminarlo?")) {
-            url = "@Url.Content("~/Registros/DeleteRegistroCliente")"+"/"+id;
+            url = "@Url.Content("~/Productos/DeleteProducto")"+"/"+id;
             $.post(url, function (data) {
                 if (data == "1") {
-                    document.location.href = "@Url.Content("~/Registros/RegistroCliente")"
+                    document.location.href = "@Url.Content("~/Productos/Inventario")"
                 }
                 else
                 {
@@ -162,4 +156,3 @@
     }
     </script>
 }
-

@@ -12,23 +12,24 @@ namespace GymAnubisNetF.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class status
+    public partial class venta_prod
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public status()
+        public venta_prod()
         {
-            this.cliente = new HashSet<cliente>();
-            this.producto = new HashSet<producto>();
+            this.cliente1 = new HashSet<cliente>();
             this.user = new HashSet<user>();
         }
     
         public int id { get; set; }
-        public string statusname { get; set; }
+        public string cliente { get; set; }
+        public string producto { get; set; }
+        public string cantidad { get; set; }
+        public string fecha { get; set; }
+        public string precio { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<cliente> cliente { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<producto> producto { get; set; }
+        public virtual ICollection<cliente> cliente1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<user> user { get; set; }
     }

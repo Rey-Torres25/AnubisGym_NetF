@@ -4,12 +4,12 @@
 }
 
 <div class="container mx-auto text-center" style="width: 400px;">
-    <h3>Registro Empleado</h3>
+    <h2>Registro Empleado</h2>
 </div>
 
 <div class="row">
     <div class="col-md-12">
-        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/RE_Add")'" value="Agregar usuario"/>
+        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/AddRegistroEmpleado")'" value="Agregar usuario" />
     </div>
 </div>
 
@@ -35,36 +35,60 @@
                 <td>@oItem.Nombre</td>
                 <td>@oItem.Edad</td>
                 <td>
-                    <input type="button" class="btn btn-primary" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRE/"+oItem.Id)'"/>
+                    <input type="button" class="btn btn-primary" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRegistroEmpleado/"+oItem.Id)'" />
                     <input type="button" class="btn btn-danger" value="Eliminar" onclick="deleteFetch(@oItem.Id);" />
                 </td>
             </tr>
-         }
+        }
     </tbody>
 </table>
 
-<script>
+@section scripts{
+    <script>
     function deleteFetch(id) {
-        url = "@Url.Content("~/Registros/DeleteRE")" + "/" + id;
-
-        Swal.fire({
-            title: '¿Estas seguro de eliminarlo?',
-            text: "No se podra revertir la eleccion",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Si, eliminar!',
-            cancelButtonText: 'No, cancelar!',
-        }).then((res) => {
-            if (res) {
-                $.ajax({
-                url: url,
-                type: "POST",
-                    success: function (data) {
-                        document.location.href = "@Url.Content("~/Registros/RegistroEmpleado")"
-                    }
-                });
-            }
-        })
+        if (confirm("¿Estas seguro de eliminarlo?")) {
+            url = "@Url.Content("~/Registros/DeleteRegistroEmpleado")"+"/"+id;
+            $.post(url, function (data) {
+                if (data == "1") {
+                    document.location.href = "@Url.Content("~/Registros/RegistroEmpleado")"
+                }
+                else
+                {
+                    alert("Ocurrio un error :(")
+                }
+            })
+        }
     }
-</script>
+    </script>
+    }
+
+
+
+
+
+
+@*<script>
+        function deleteFetch(id) {
+            url = "@Url.Content("~/Registros/DeleteRE")" + "/" + id;
+
+            Swal.fire({
+                title: '¿Estas seguro de eliminarlo?',
+                text: "No se podra revertir la eleccion",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Si, eliminar!',
+                cancelButtonText: 'No, cancelar!',
+            }).then((res) => {
+                if (res) {
+                    $.ajax({
+                    url: url,
+                    type: "POST",
+                        success: function (data) {
+                            document.location.href = "@Url.Content("~/Registros/RegistroEmpleado")"
+                        }
+                    });
+                }
+            })
+        }
+    </script>*@
 

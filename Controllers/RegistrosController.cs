@@ -14,10 +14,122 @@ namespace GymAnubisNetF.Controllers
         // GET: Registros
         public ActionResult RegistroCliente()
         {
+            List<ClienteTableViewModel> lst = null;
+
+
+            using (AnubisGymNetFEntities db = new AnubisGymNetFEntities())
+            {
+                lst = (from d in db.cliente
+                       where d.idStatus == 1
+                       select new ClienteTableViewModel
+                       {
+                           Id = d.id,
+                           Nombre = d.nombre,
+                           Edad = d.edad,
+                           Correo = d.correo,
+                           Telefono = d.telefono,
+                           Direccion = d.direccion,
+                           FechaRegistro = d.fecha_registro
+                       }).ToList();
+            }
+            int CountCustomer = lst.Count();
+            ViewBag.CountCustomer = CountCustomer;
+            return View(lst);
+        }
+
+        [HttpGet]
+        public ActionResult AddRegistroCliente()
+        {
             return View();
         }
 
+        [HttpPost]
+        public ActionResult AddRegistroCliente(ClienteViewModel model)
+        {
 
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var Tiempo = DateTime.Now.ToString("yyyy-MM-dd");
+            string TiempoString = Convert.ToString(Tiempo);
+
+            using (var db = new AnubisGymNetFEntities())
+            {
+                cliente oCliente = new cliente();
+                oCliente.idStatus = 1;
+                oCliente.nombre = model.Nombre;
+                oCliente.edad = model.Edad;
+                oCliente.correo = model.Correo;
+                oCliente.telefono = model.Telefono;
+                oCliente.direccion = model.Direccion;
+                oCliente.fecha_registro = TiempoString;
+
+                db.cliente.Add(oCliente);
+                db.SaveChanges();
+
+            }
+
+            return Redirect(Url.Content("~/Registros/RegistroCliente"));
+        }
+
+        public ActionResult EditRegistroCliente(int Id)
+        {
+
+            EditClienteViewModel model = new EditClienteViewModel();
+
+            using (var db = new AnubisGymNetFEntities())
+            {
+                var oCliente = db.cliente.Find(Id);
+
+                model.Nombre = oCliente.nombre;
+                model.Edad = oCliente.edad;
+                model.Correo = oCliente.correo;
+                model.Telefono = oCliente.telefono;
+                model.Direccion = oCliente.direccion;
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult EditRegistroCliente(EditClienteViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            using (var db = new AnubisGymNetFEntities())
+            {
+                var oCliente = db.cliente.Find(model.Id);
+
+                oCliente.nombre = model.Nombre;
+                oCliente.edad = model.Edad;
+                oCliente.correo = model.Correo;
+                oCliente.telefono = model.Telefono;
+                oCliente.direccion = model.Direccion;
+
+                db.Entry(oCliente).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+            return Redirect(Url.Content("~/Registros/RegistroCliente"));
+        }
+
+        [HttpPost]
+        public ActionResult DeleteRegistroCliente(int Id)
+        {
+            using (var db = new AnubisGymNetFEntities())
+            {
+                var oCliente = db.cliente.Find(Id);
+                oCliente.idStatus = 3; //Eliminamos
+                db.Entry(oCliente).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Content("1");
+        }
 
         public ActionResult RegistroEmpleado()
         {
@@ -40,14 +152,14 @@ namespace GymAnubisNetF.Controllers
         }
 
         [HttpGet]
-        public ActionResult RE_Add()
+        public ActionResult AddRegistroEmpleado()
         {
 
             return View();
         }
 
         [HttpPost]
-        public ActionResult RE_Add(UserViewModel model)
+        public ActionResult AddRegistroEmpleado(UserViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -71,7 +183,7 @@ namespace GymAnubisNetF.Controllers
             return Redirect(Url.Content("~/Registros/RegistroEmpleado"));
         }
 
-        public ActionResult EditRE(int Id)
+        public ActionResult EditRegistroEmpleado(int Id)
         {
 
             EditUserViewModel model = new EditUserViewModel();
@@ -91,7 +203,7 @@ namespace GymAnubisNetF.Controllers
         }
 
         [HttpPost]
-        public ActionResult EditRE(EditUserViewModel model)
+        public ActionResult EditRegistroEmpleado(EditUserViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -118,7 +230,7 @@ namespace GymAnubisNetF.Controllers
         }
 
         [HttpPost]
-        public ActionResult DeleteRE(int Id)
+        public ActionResult DeleteRegistroEmpleado(int Id)
         {
             using ( var db = new AnubisGymNetFEntities())
             {
