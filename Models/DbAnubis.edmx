@@ -85,8 +85,9 @@
           <Property Name="cliente" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="producto" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="cantidad" Type="varchar" MaxLength="100" Nullable="false" />
-          <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="precio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="total" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
         <Association Name="FK_cliente_status1">
           <End Role="status" Type="Self.status" Multiplicity="1" />
@@ -300,8 +301,9 @@
           <Property Name="cliente" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="producto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="cantidad" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="precio" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="total" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="cliente1" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="venta_prod" ToRole="cliente" />
           <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="venta_prod" ToRole="user" />
         </EntityType>
@@ -453,8 +455,9 @@
           <EntitySetMapping Name="venta_prod">
             <EntityTypeMapping TypeName="AnubisGymNetFModel.venta_prod">
               <MappingFragment StoreEntitySet="venta_prod">
-                <ScalarProperty Name="precio" ColumnName="precio" />
+                <ScalarProperty Name="total" ColumnName="total" />
                 <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="precio" ColumnName="precio" />
                 <ScalarProperty Name="cantidad" ColumnName="cantidad" />
                 <ScalarProperty Name="producto" ColumnName="producto" />
                 <ScalarProperty Name="cliente" ColumnName="cliente" />

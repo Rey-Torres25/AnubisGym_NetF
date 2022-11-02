@@ -1,6 +1,8 @@
 ﻿
 @{
     ViewBag.Title = "SellProducto";
+    List<SelectListItem> clients = (List<SelectListItem>)ViewBag.clients;
+    List<SelectListItem> prods = (List<SelectListItem>)ViewBag.prods;
 }
 
 <div class="container mx-auto text-center" style="width: 400px;">
@@ -16,16 +18,17 @@
                     <div class="col-md-4">
                         <label class="">Fecha:</label>
                         @*datetime*@
-                        <input type="text" readonly class="form-control" id="DateTime" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                        <input type="text" readonly class="form-control" id="Fecha" value="@DateTime.Now.ToString("yyyy-MM-dd")">
                     </div>
                     <div class="col-md-4">
                         <label class="">Selecciona el cliente:</label>
-                        <select id="Cliente" class="form-select" aria-label="Cliente">
+                        @Html.DropDownList("DropdownClientes", clients, "Selecciona una opcion", new { @class = "form-select align-items-center", id = "Cliente" })
+                        @*<select id="Cliente" class="form-select" aria-label="Cliente">
                             <option selected>Open this select menu</option>
                             <option value="1">One</option>
                             <option value="2">Two</option>
                             <option value="3">Three</option>
-                        </select>
+                        </select>*@
                     </div>
                 </div>
             </div>
@@ -36,19 +39,20 @@
                 <div class="row justify-content-center">
                     <div class="col-md-4">
                         <label class="">Selecciona el producto:</label>
-                        <select id="Producto" class="form-select" aria-label="Cliente">
-                            <option selected>Open this select menu</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                        @Html.DropDownList("DropdownProducto", prods, "Selecciona una opcion", new { @class = "form-select align-items-center", id = "Producto" })
+                        @*<select id="Producto" class="form-select" aria-label="Cliente">
+                          <option selected>Open this select menu</option>
+                          <option value="1">One</option>
+                          <option value="2">Two</option>
+                          <option value="3">Three</option>
+                        </select>*@
                     </div>
                     <div class="col-md-4">
                         <label class="">Cantidad:</label>
                         <input id="Cantidad" type="number" pattern="^[1-9]\d*$" onkeypress="return soloNumeros(event);" class="form-control" style="Text-align:Center" min="1" step="1" value="">
                     </div>
                     <div class="m-2 text-center">
-                        <input type="button" class="btn btn-primary" id="AddTable" value="Agregar" disabled />
+                        <input type="button" class="btn btn-primary" id="AddFila" onclick="AddFila()" value="Agregar" disabled />
                     </div>
                 </div>
             </div>
@@ -59,42 +63,66 @@
             <div class="card-body">
                 <div class="row justify-content-center">
                     <div class="table-responsive">
-                        <table id="TableProd" class="table table-striped">
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Producto</th>
-                                <th>Cantidad</th>
-                                <th>Eliminar</th>
-                            </tr>
+                        <table id="mytable" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Cliente</th>
+                                    <th>Producto</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>Total unitario</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody id="tablita">
+                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-
+        
         <div class="card m-1">
             <div class="card-body">
                 <div class="row justify-content-center">
-                    <div class="col-sm-2 m-1">
-                        <label for="inputPassword6" class="col-form-label justify-content-end align-items-end">Total:</label>
-                    </div>
+                    @*<div class="col-sm-2 m-1">
+                        <label class="col-form-label justify-content-end align-items-end">Total:</label>
+                    </div>*@
                     <div class="col-sm-4 m-1">
-                        <input type="number" id="inputPassword6" class="form-control" aria-describedby="passwordHelpInline" disabled>
+                        @*Total compra: <span id="Total">0</span>*@
+                        @*<input type="number" id="Total"  class="form-control" disabled>*@
                     </div>
                     <div class="col-sm-2 m-1">
-                        <input type="submit" onclick="EnviarProd()" class="btn btn-success" value="Guardar compra" />
+                        <input type="button" class="btn btn-primary" onclick="ActProd()" data-bs-toggle="modal" data-bs-target="#staticBackdrop" value="Realizar compra"/>
+                        @*<input type="submit" onclick="EnviarProd()" class="btn btn-success" value="Guardar compra" />*@
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticBackdropLabel">Confirmar compra</h5>
+                    </div>
+                    <div class="modal-body">
+                        Las compras confirman un total de: <span class="" id="valTotal">0</span>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" onclick="EnviarProd()" class="btn btn-success">Aceptar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 </div>
 
 @section scripts{
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
     <script>
         /**
          * Función que solo permite la entrada de numeros, un signo negativo y
@@ -131,97 +159,113 @@
         let activador = document.getElementById("Cantidad")
         activador.addEventListener("mousemove", () => {
             if (activador.value > 0 && activador.value != '') {
-                document.getElementById("AddTable").disabled = false
+                document.getElementById("AddFila").disabled = false
             } else {
-                document.getElementById("AddTable").disabled = true
+                document.getElementById("AddFila").disabled = true
             }
         })
     </script>
     <script>
-        var cantidad = document.getElementById("Cantidad").value;
-        
-            $(document).ready(function () {
-                //obtenemos el valor de los input
-
-                $('#AddTable').click(function () {
-                    var fecha = document.getElementById("DateTime").value;
-                    var cliente = document.getElementById("Cliente").value;
-                    var producto = document.getElementById("Producto").value;
-                    var cantidad = document.getElementById("Cantidad").value;
-                    /*var precio = document.getElementById("Precio").value;*/
 
 
-                    var i = 1; //contador para asignar id al boton que borrara la fila
-                    var fila = '<tr id="row' + i + '"><td id="fechaf">' + fecha + '</td><td id="clientef">' + cliente + '</td><td id="productof">' + producto + '</td><td id="cantidadf">' + cantidad + /*'</td><td>' + precio +*/'</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">Quitar</button></td></tr>'; //esto seria lo que contendria la fila
-
-                    i++;
-
-                    $('#TableProd tr:first').after(fila);
-                    //$("#AddTable").text(""); //esta instruccion limpia el div adicioandos para que no se vayan acumulando
-                    var nFilas = $("#TableProd tr").length;
-                    $("#AddTable").append(nFilas - 1);
-                    //le resto 1 para no contar la fila del header
-                    //document.getElementById("DateTime").value = "";
-                    //document.getElementById("Cliente").value = "";
-                    //document.getElementById("Producto").value = "";
-                    //document.getElementById("Cantidad").value = "";
-                    //document.getElementById("Cantidad").focus();
-                    ///*document.getElementById("Precio").value;*/
-
-
-                });
-                $(document).on('click', '.btn_remove', function () {
-                    var button_id = $(this).attr("id");
-                    //cuando da click obtenemos el id del boton
-                    $('#row' + button_id + '').remove(); //borra la fila
-                    //limpia el para que vuelva a contar las filas de la tabla
-                    //$("#AddTable").text("");
-                    //var nFilas = $("#TableProd tr").length;
-                    //$("#AddTable").append(nFilas - 1);
-                });
-            });
-        
     </script>
 
     <script>
         let urlEP = "@Url.Content("~/Productos/ProductosPost")";
+        function ActProd() {
+            var data = [];
+            $("td.TotalPrice").each(function () {
+                data.push(parseFloat($(this).text()));
+            });
 
-        //function ActProd() {
-        //    var data = [];
-        //    $("td.totalprice").each(function () {
-        //        data.push(parseFloat($(this).text()));
-        //    });
+
+            var suma = data.reduce(function (a, b) { return a + b; }, 0);
+
+            console.log(data);
+            console.log(suma);
+            document.getElementById("valTotal").innerHTML = suma.toFixed(2);
+            return suma;
+
+        }
+
+        /*var valorTotal = 0;*/
+
+        function AddFila() {
 
 
-        //    var suma = data.reduce(function (a, b) { return a + b; }, 0);
+            let fecha = document.getElementById("Fecha").value;
 
-        //    console.log(data);
-        //    console.log(suma);
-        //    document.getElementById("val").innerHTML = suma.toFixed(2);
-        //}
+            //Obtenemos el valor del cliente
+            let cliente = document.getElementById("Cliente");
+            //Obtenemos el texto del dropdown
+            let clienteText = cliente.options[cliente.selectedIndex].text;
+
+            //Obtenemos el valor del producto
+            let producto = document.getElementById("Producto");
+            //Obtenemos el texto dentro del dropdown del producto
+            let productoText = producto.options[producto.selectedIndex].text;
+            //Obtenemos el precio del producto
+            let precio = document.getElementById("Producto").value;
+
+            let cantidad = document.getElementById("Cantidad").value;
+
+            let SumSubtotal = precio * cantidad;
+
+            var i = 1;
+            let fila = '<tr id="row' + i + '"><td>' + fecha + '</td><td>' + clienteText + '</td><td>' + productoText + '</td><td>' + precio + '</td><td>' + cantidad + '</td><td class="TotalPrice">' + SumSubtotal + '</td><td><button type="button" name="remove" id="' + i + '" class="btn btn-danger btn_remove">Quitar</button></td></tr>';
+            i++;
+            $(document).on('click', '.btn_remove', function (event) {
+                event.preventDefault();
+                $(this).closest('tr').remove();
+
+                /*document.getElementById("Total").innerText = "";*/
+                //valorTotal = valorTotal - SumSubtotal;
+                //document.getElementById("Total").innerText = valorTotal;
+            //    if (valorTotal < 0) {
+            //        valorTotal = 0
+            //        document.getElementById("Total").innerText = valorTotal;
+            //    } else {
+            //        document.getElementById("Total").innerText = valorTotal;
+            //    }
+            });
+            let btn = document.createElement("TR");
+            btn.innerHTML = fila;
+            document.getElementById("tablita").appendChild(btn);
+
+            //valorTotal += SumSubtotal;
+            //document.getElementById("Total").innerText = valorTotal;
+        }
 
         function EnviarProd() {
             let filas = [];
-
-            $('#TableProd tbody tr').each(function () {
+            let Total = ActProd();
+            console.log(Total);
+            $('#mytable tbody tr').each(function () {
                 //let Id_Reclamacion = document.getElementById('Id_rec').value;
                 //let Numero_Pedido = document.getElementById('inputNumeroPedido').value;
                 let fecha = $(this).find('td').eq(0).text();
                 let cliente = $(this).find('td').eq(1).text();
                 let producto = $(this).find('td').eq(2).text();
-                let cantidad = $(this).find('td').eq(3).text();
+                let precio = $(this).find('td').eq(3).text();
+                let cantidad = $(this).find('td').eq(4).text();
 
             /* let Importe_Total = document.getElementById('val').innerHTML;*/
+
 
             var fila = {
                 fecha,
                 cliente,
                 producto,
-                cantidad
+                precio,
+                cantidad,
+                Total
             };
 
                 filas.push(fila);
-                console.log(filas);
+
+            });
+            console.log(filas);
+            //Se mandan los datos al controlador Productos
             fetch(urlEP, {
                 method: "POST",
                 headers: {
@@ -246,7 +290,7 @@
                     //    alert(Data)
                     //}
                 } else {
-
+                    document.location.href = "@Url.Content("~/Productos/Index")"
                 }
             }).catch(function (Data) {
                 Swal.fire({
@@ -257,8 +301,7 @@
                 })
                 //alert('Debes de asignar el ID de reclamacion');
             });
-            });
         }
-                
+
     </script>
 }

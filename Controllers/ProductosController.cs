@@ -26,7 +26,49 @@ namespace GymAnubisNetF.Controllers
 
         public ActionResult SellProducto()
         {
+            List<ClienteViewModel> lst = null;
+            using (Models.AnubisGymNetFEntities db = new Models.AnubisGymNetFEntities())
+            {
+                lst = (from d in db.cliente
+                       select new ClienteViewModel
+                       {
+                           Nombre = d.nombre,
+                           Id = d.id
+                       }).ToList();
+            }
 
+            List<SelectListItem> clients = lst.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.Nombre.ToString(),
+                    Value = d.Id.ToString(),
+                    Selected = false
+                };
+            });
+            //--------------------------------------------------------------------------------
+            List<ProductoViewModel> lst1 = null;
+            using (Models.AnubisGymNetFEntities db = new Models.AnubisGymNetFEntities())
+            {
+                lst1 = (from d in db.producto
+                       select new ProductoViewModel
+                       {
+                           NombreProd = d.nombre,
+                           Precio = d.precio
+                       }).ToList();
+            }
+
+            List<SelectListItem> prods = lst1.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.NombreProd.ToString(),
+                    Value = d.Precio.ToString(),
+                    Selected = false
+                };
+            });
+            ViewBag.prods = prods;
+            ViewBag.clients = clients;
             return View();
         }
 
@@ -161,35 +203,35 @@ namespace GymAnubisNetF.Controllers
                 using (AnubisGymNetFEntities db = new AnubisGymNetFEntities())
                 {
 
-                    var oProduct = new Models.venta_prod();
-                    int CantNum = int.Parse(oProduct.cantidad);
+                    var oProduct = new venta_prod();
                     //Convert.ToString(product.Numero_Pedido);
-                    //string NP = string.Format("{0:0000000000}", product.Numero_Pedido);
+
                     foreach (var product in ventaprod)
                     {
-                        oProduct.cliente = product.Cliente;
-                        oProduct.producto = product.Producto;
-                        oProduct.cantidad = product.Cantidad;
-                        oProduct.fecha = product.Fecha;
-
-
+                        if (product.Cantidad == null)
+                        {
+                            return Content("No se permiten agregar espacios vacios o espacios en blanco");
+                        }
+                        else
+                        {
+                            oProduct.cliente = product.Cliente;
+                            oProduct.producto = product.Producto;
+                            oProduct.cantidad = product.Cantidad;
+                            oProduct.precio = product.Precio;
+                            oProduct.fecha = product.Fecha;
+                            oProduct.total = product.Total;
+                            db.venta_prod.Add(oProduct);
+                            db.SaveChanges();   
+                        }
                     }
-                    if (CantNum != 0)
-                    {
-                        return Content("No se permiten agregar espacios vacios o espacios en blanco");
-                    }
-                    else
-                    {
-                        db.venta_prod.Add(oProduct);
-                        db.SaveChanges();
-                        return Content("1");
-                    }
+                    return Content("1");
                 }
             }
             catch
             {
                 return Content("No se puede enviar los productos");
             }
+        
         }
     }
 }

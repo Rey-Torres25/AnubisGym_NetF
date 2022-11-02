@@ -25,8 +25,9 @@ namespace GymAnubisNetF.Models
         public string cliente { get; set; }
         public string producto { get; set; }
         public string cantidad { get; set; }
-        public string fecha { get; set; }
         public string precio { get; set; }
+        public string fecha { get; set; }
+        public string total { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<cliente> cliente1 { get; set; }

@@ -83,8 +83,9 @@
     <EntitySetMapping Name="venta_prod">
       <EntityTypeMapping TypeName="AnubisGymNetFModel.venta_prod">
         <MappingFragment StoreEntitySet="venta_prod">
-          <ScalarProperty Name="precio" ColumnName="precio" />
+          <ScalarProperty Name="total" ColumnName="total" />
           <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="precio" ColumnName="precio" />
           <ScalarProperty Name="cantidad" ColumnName="cantidad" />
           <ScalarProperty Name="producto" ColumnName="producto" />
           <ScalarProperty Name="cliente" ColumnName="cliente" />

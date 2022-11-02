@@ -80,8 +80,9 @@
     <Property Name="cliente" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="producto" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="cantidad" Type="varchar" MaxLength="100" Nullable="false" />
-    <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
     <Property Name="precio" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="total" Type="varchar" MaxLength="100" Nullable="false" />
   </EntityType>
   <Association Name="FK_cliente_status1">
     <End Role="status" Type="Self.status" Multiplicity="1" />

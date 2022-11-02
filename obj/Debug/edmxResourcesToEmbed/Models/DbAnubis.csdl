@@ -118,8 +118,9 @@
     <Property Name="cliente" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="producto" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="cantidad" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="precio" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="total" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <NavigationProperty Name="cliente1" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="venta_prod" ToRole="cliente" />
     <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="venta_prod" ToRole="user" />
   </EntityType>
