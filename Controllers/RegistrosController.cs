@@ -135,7 +135,7 @@ namespace GymAnubisNetF.Controllers
         {
             List<UserTableViewModel> lst = null;
 
-            using(AnubisGymNetFEntities db = new AnubisGymNetFEntities())
+            using (AnubisGymNetFEntities db = new AnubisGymNetFEntities())
             {
                 lst = (from d in db.user
                        where d.idStatus == 1
@@ -165,8 +165,8 @@ namespace GymAnubisNetF.Controllers
             {
                 return View(model);
             }
-            
-            using(var db = new AnubisGymNetFEntities())
+
+            using (var db = new AnubisGymNetFEntities())
             {
                 user oUser = new user();
                 oUser.idStatus = 1;
@@ -211,14 +211,14 @@ namespace GymAnubisNetF.Controllers
             }
 
             using (var db = new AnubisGymNetFEntities())
-            { 
+            {
                 var oUser = db.user.Find(model.Id);
                 oUser.nombre = model.Nombre;
                 oUser.usuario = model.NombreUsuario;
                 oUser.correo = model.Correo;
                 oUser.edad = model.Edad;
 
-                if(model.Password!=null && model.Password.Trim() != "")
+                if (model.Password != null && model.Password.Trim() != "")
                 {
                     oUser.password = model.Password;
                 }
@@ -226,13 +226,13 @@ namespace GymAnubisNetF.Controllers
                 db.Entry(oUser).State = System.Data.Entity.EntityState.Modified;
                 db.SaveChanges();
             }
-                return Redirect(Url.Content("~/Registros/RegistroEmpleado"));
+            return Redirect(Url.Content("~/Registros/RegistroEmpleado"));
         }
 
         [HttpPost]
         public ActionResult DeleteRegistroEmpleado(int Id)
         {
-            using ( var db = new AnubisGymNetFEntities())
+            using (var db = new AnubisGymNetFEntities())
             {
                 var oUser = db.user.Find(Id);
                 oUser.idStatus = 3; //Eliminamos
@@ -243,10 +243,141 @@ namespace GymAnubisNetF.Controllers
             return Content("1");
         }
 
-
-        public ActionResult RegistroEntrada()
+        public ActionResult RegistroAsistencia()
         {
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult RegistroEntrada(int Id)
+        {
+
+            AsistenciaViewModel modelAsist = new AsistenciaViewModel();
+            ClienteViewModel modelClient = new ClienteViewModel();
+
+
+            //var oAsist = db.producto.Find(Id);
+
+            //modelClient.Nombre = 
+            List<ClienteViewModel> lst = null;
+
+            using (var db = new AnubisGymNetFEntities())
+            {
+                lst = (from d in db.cliente
+                       select new ClienteViewModel
+                       {
+                           Nombre = d.nombre,
+                           Id = d.id
+                       }).ToList();
+            }
+
+            List<SelectListItem> clients = lst.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.Id + " - " + d.Nombre.ToString(),
+                    Value = d.Id.ToString(),
+                    Selected = false,
+                };
+            });
+            //-------------------------------------
+            //List<AsistenciaTableViewModel> lstAsist = null;
+
+            //using (var db = new AnubisGymNetFEntities())
+            //{
+            //    string FechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+            //    lstAsist = (from d in db.asistencia
+            //                //where d.fecha == FechaHoy
+            //                select new AsistenciaTableViewModel
+            //                {
+            //                    Id = d.id,
+            //                    //Nombre = d.nombre,
+            //                    //Asistencia = d.asistencia1
+
+            //                }).ToList();
+            //}
+            ViewBag.clients = clients;
+            //ViewBag.lstAsist = lstAsist;
+
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult RegistroEntrada(AsistenciaViewModel model)
+        {
+            //AsistenciaViewModel model = new AsistenciaViewModel();
+            var FechaHoy = DateTime.Now.ToString("yyyy-MM-dd");
+            //var HoraHoy = DateTime.Now.ToString("hh:mm tt");
+            //HoraHoy = model.Hora;
+            using (var db = new AnubisGymNetFEntities())
+            {
+                var GetUser = (from d in db.asistencia
+                               where d.idCliente == model.IdCliente && d.fecha == FechaHoy
+                               select d).ToList();
+
+                if (model.IdCliente == GetUser[0].idCliente || GetUser[0].fecha == model.Fecha) //Eliminar este if
+                {
+                    return Content("No se puede registrar más de dos veces al día");
+                }
+                else
+                {
+                    asistencia oAsist = new asistencia();
+                    //oAsist.nombre = model.Nombre;
+                    oAsist.idCliente = model.IdCliente;
+                    oAsist.fecha = model.Fecha;
+                    oAsist.hora = model.Hora;
+                    //oAsist.asistencia1 = model.Asistencia;
+
+                    db.asistencia.Add(oAsist);
+                    db.SaveChanges();
+                }
+
+            }
+
+            //return Redirect(Url.Content("~/Registros/RegistroEntrada/"+FechaHoy));
+            return Content("1");
+        }
+
+        [HttpGet]
+        public ActionResult VerAsistencias()
+        {
+            List<AsistenciaTableViewModel> lst = null;
+            using (var db = new AnubisGymNetFEntities())
+            {
+
+                lst = (from a in db.asistencia
+                       join c in db.cliente
+                       on a.idCliente equals c.id
+                       select new AsistenciaTableViewModel
+                       {
+                           Id = a.id,
+                           IdCliente = a.idCliente,
+                           NombreCliente = c.nombre,
+                           Fecha = a.fecha,
+                           Hora = a.hora
+                       }).ToList();
+            }
+            return View(lst);
+        }
+
+        [HttpPost]
+        public ActionResult DeleteRegistroAsistencia(int Id)
+        {
+            using (var db = new AnubisGymNetFEntities())
+            {
+                var oAsist = (from d in db.asistencia
+                              where d.id == Id
+                              select d).FirstOrDefault();
+
+                /*db.asistencia.Find(Id);*/
+
+
+                db.asistencia.Remove(oAsist); //Eliminamos
+                //db.Entry(oAsist).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChanges();
+            }
+
+            return Content("1");
         }
 
         public ActionResult RegistroEquipo()

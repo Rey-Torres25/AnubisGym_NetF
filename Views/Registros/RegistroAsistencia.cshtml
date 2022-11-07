@@ -1,0 +1,56 @@
+﻿
+@{
+    ViewBag.Title = "RegistroAsistencia";
+}
+
+<div class="container mx-auto text-center" style="width: 400px;">
+    <h2>Registro de Asistencia</h2>
+</div>
+
+<div class="row" style="width: 100%;">
+    <div class="col-md-6 offset-md-3">
+        <div class="card text-center">
+            <div class="container">
+                <div class="row g-2 align-items-center m-5">
+                    <div class="col-auto">
+                        <label class="col-form-label">Fecha:</label>
+                    </div>
+                    <div class="input-group date" id="datepicker">
+                        <input type="text"  style="Text-align:Center;" class="form-control" readonly>
+                        <span class="input-group-append">
+                            <span class="input-group-text bg-white d-block">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row justify-content-evenly m-2 text-center flex">
+                    <div class="col-md-5 m-2">
+                        <input type="button" class="btn btn-primary" value="Registrar Entrada" onclick="document.location.href = '@Url.Content("~/Registros/RegistroEntrada/"+@DateTime.Now.ToString("yyyyMMdd"))'" />
+                    </div>
+                    <div class="col-md-5 m-2">
+                        <input type="button" class="btn btn-info" value="Ver asistencias" style="color: white;" onclick="document.location.href = '@Url.Content("~/Registros/VerAsistencias")'"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#datepicker').datepicker({
+                "format": 'yyyy/mm/dd',
+                "autoclose": true,
+                endDate: "0",
+                startDate: "0",
+                todayHighlight: true,
+            }).datepicker("setDate", "0");
+        });
+    </script>
+}

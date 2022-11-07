@@ -140,6 +140,9 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\asistencia.cs">
+      <DependentUpon>DbAnubis.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\cliente.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
@@ -161,9 +164,6 @@
     <Compile Include="Models\producto.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\registro_entrada.cs">
-      <DependentUpon>DbAnubis.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\registro_equipo.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
@@ -173,6 +173,7 @@
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TableViewModels\AsistenciaTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ClienteTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ProductoTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\UserTableViewModel.cs" />
@@ -182,6 +183,7 @@
     <Compile Include="Models\venta_prod.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\AsistenciaViewModel.cs" />
     <Compile Include="Models\ViewModels\ClienteViewModel.cs" />
     <Compile Include="Models\ViewModels\ProductoViewModel.cs" />
     <Compile Include="Models\ViewModels\UserViewModel.cs" />
@@ -302,6 +304,8 @@
     <Content Include="Views\Productos\Inventario.cshtml" />
     <Content Include="Views\Registros\EditRegistroCliente.cshtml" />
     <Content Include="Views\Productos\EditProducto.cshtml" />
+    <Content Include="Views\Registros\RegistroAsistencia.cshtml" />
+    <Content Include="Views\Registros\VerAsistencias.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

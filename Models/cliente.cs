@@ -14,6 +14,12 @@ namespace GymAnubisNetF.Models
     
     public partial class cliente
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public cliente()
+        {
+            this.asistencia = new HashSet<asistencia>();
+        }
+    
         public int id { get; set; }
         public string nombre { get; set; }
         public int edad { get; set; }
@@ -24,6 +30,8 @@ namespace GymAnubisNetF.Models
         public int idStatus { get; set; }
         public Nullable<int> idCompra { get; set; }
     
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<asistencia> asistencia { get; set; }
         public virtual status status { get; set; }
         public virtual venta_prod venta_prod { get; set; }
     }

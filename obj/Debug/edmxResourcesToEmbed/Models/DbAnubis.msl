@@ -1,6 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="AnubisGymNetFModelStoreContainer" CdmEntityContainer="AnubisGymNetFEntities">
+    <EntitySetMapping Name="asistencia">
+      <EntityTypeMapping TypeName="AnubisGymNetFModel.asistencia">
+        <MappingFragment StoreEntitySet="asistencia">
+          <ScalarProperty Name="hora" ColumnName="hora" />
+          <ScalarProperty Name="fecha" ColumnName="fecha" />
+          <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="cliente">
       <EntityTypeMapping TypeName="AnubisGymNetFModel.cliente">
         <MappingFragment StoreEntitySet="cliente">
@@ -24,15 +34,6 @@
           <ScalarProperty Name="precio" ColumnName="precio" />
           <ScalarProperty Name="stock" ColumnName="stock" />
           <ScalarProperty Name="nombre" ColumnName="nombre" />
-          <ScalarProperty Name="id" ColumnName="id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="registro_entrada">
-      <EntityTypeMapping TypeName="AnubisGymNetFModel.registro_entrada">
-        <MappingFragment StoreEntitySet="registro_entrada">
-          <ScalarProperty Name="fecha_entrada" ColumnName="fecha_entrada" />
-          <ScalarProperty Name="nombre_cliente" ColumnName="nombre_cliente" />
           <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>

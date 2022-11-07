@@ -5,6 +5,15 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="AnubisGymNetFModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCliente" Type="int" Nullable="false" />
+          <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="hora" Type="varchar" MaxLength="100" Nullable="false" />
+        </EntityType>
         <EntityType Name="cliente">
           <Key>
             <PropertyRef Name="id" />
@@ -29,14 +38,6 @@
           <Property Name="precio" Type="int" Nullable="false" />
           <Property Name="fecha_registro" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="idStatus" Type="int" Nullable="false" />
-        </EntityType>
-        <EntityType Name="registro_entrada">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nombre_cliente" Type="varchar" MaxLength="50" Nullable="false" />
-          <Property Name="fecha_entrada" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="registro_equipo">
           <Key>
@@ -89,6 +90,18 @@
           <Property Name="fecha" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="total" Type="varchar" MaxLength="100" Nullable="false" />
         </EntityType>
+        <Association Name="FK_asistencia_cliente1">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="asistencia" Type="Self.asistencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_cliente_status1">
           <End Role="status" Type="Self.status" Multiplicity="1" />
           <End Role="cliente" Type="Self.cliente" Multiplicity="*" />
@@ -150,14 +163,18 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="AnubisGymNetFModelStoreContainer">
+          <EntitySet Name="asistencia" EntityType="Self.asistencia" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="cliente" EntityType="Self.cliente" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="registro_entrada" EntityType="Self.registro_entrada" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="registro_equipo" EntityType="Self.registro_equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="venta_prod" EntityType="Self.venta_prod" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_asistencia_cliente1" Association="Self.FK_asistencia_cliente1">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="asistencia" EntitySet="asistencia" />
+          </AssociationSet>
           <AssociationSet Name="FK_cliente_status1" Association="Self.FK_cliente_status1">
             <End Role="status" EntitySet="status" />
             <End Role="cliente" EntitySet="cliente" />
@@ -184,14 +201,18 @@
     <edmx:ConceptualModels>
       <Schema Namespace="AnubisGymNetFModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AnubisGymNetFEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="asistencia" EntityType="AnubisGymNetFModel.asistencia" />
           <EntitySet Name="cliente" EntityType="AnubisGymNetFModel.cliente" />
           <EntitySet Name="producto" EntityType="AnubisGymNetFModel.producto" />
-          <EntitySet Name="registro_entrada" EntityType="AnubisGymNetFModel.registro_entrada" />
           <EntitySet Name="registro_equipo" EntityType="AnubisGymNetFModel.registro_equipo" />
           <EntitySet Name="status" EntityType="AnubisGymNetFModel.status" />
           <EntitySet Name="sysdiagrams" EntityType="AnubisGymNetFModel.sysdiagrams" />
           <EntitySet Name="user" EntityType="AnubisGymNetFModel.user" />
           <EntitySet Name="venta_prod" EntityType="AnubisGymNetFModel.venta_prod" />
+          <AssociationSet Name="FK_asistencia_cliente1" Association="AnubisGymNetFModel.FK_asistencia_cliente1">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="asistencia" EntitySet="asistencia" />
+          </AssociationSet>
           <AssociationSet Name="FK_cliente_status1" Association="AnubisGymNetFModel.FK_cliente_status1">
             <End Role="status" EntitySet="status" />
             <End Role="cliente" EntitySet="cliente" />
@@ -213,6 +234,16 @@
             <End Role="user" EntitySet="user" />
           </AssociationSet>
         </EntityContainer>
+        <EntityType Name="asistencia">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCliente" Type="Int32" Nullable="false" />
+          <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="hora" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="cliente" Relationship="AnubisGymNetFModel.FK_asistencia_cliente1" FromRole="asistencia" ToRole="cliente" />
+        </EntityType>
         <EntityType Name="cliente">
           <Key>
             <PropertyRef Name="id" />
@@ -226,6 +257,7 @@
           <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="idStatus" Type="Int32" Nullable="false" />
           <Property Name="idCompra" Type="Int32" />
+          <NavigationProperty Name="asistencia" Relationship="AnubisGymNetFModel.FK_asistencia_cliente1" FromRole="cliente" ToRole="asistencia" />
           <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="cliente" ToRole="status" />
           <NavigationProperty Name="venta_prod" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="cliente" ToRole="venta_prod" />
         </EntityType>
@@ -240,14 +272,6 @@
           <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="idStatus" Type="Int32" Nullable="false" />
           <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_producto_status" FromRole="producto" ToRole="status" />
-        </EntityType>
-        <EntityType Name="registro_entrada">
-          <Key>
-            <PropertyRef Name="id" />
-          </Key>
-          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="nombre_cliente" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="fecha_entrada" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
         <EntityType Name="registro_equipo">
           <Key>
@@ -307,6 +331,18 @@
           <NavigationProperty Name="cliente1" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="venta_prod" ToRole="cliente" />
           <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="venta_prod" ToRole="user" />
         </EntityType>
+        <Association Name="FK_asistencia_cliente1">
+          <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="AnubisGymNetFModel.asistencia" Role="asistencia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="asistencia">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_cliente_status1">
           <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="1" />
           <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="*" />
@@ -373,6 +409,16 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="AnubisGymNetFModelStoreContainer" CdmEntityContainer="AnubisGymNetFEntities">
+          <EntitySetMapping Name="asistencia">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.asistencia">
+              <MappingFragment StoreEntitySet="asistencia">
+                <ScalarProperty Name="hora" ColumnName="hora" />
+                <ScalarProperty Name="fecha" ColumnName="fecha" />
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="cliente">
             <EntityTypeMapping TypeName="AnubisGymNetFModel.cliente">
               <MappingFragment StoreEntitySet="cliente">
@@ -396,15 +442,6 @@
                 <ScalarProperty Name="precio" ColumnName="precio" />
                 <ScalarProperty Name="stock" ColumnName="stock" />
                 <ScalarProperty Name="nombre" ColumnName="nombre" />
-                <ScalarProperty Name="id" ColumnName="id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="registro_entrada">
-            <EntityTypeMapping TypeName="AnubisGymNetFModel.registro_entrada">
-              <MappingFragment StoreEntitySet="registro_entrada">
-                <ScalarProperty Name="fecha_entrada" ColumnName="fecha_entrada" />
-                <ScalarProperty Name="nombre_cliente" ColumnName="nombre_cliente" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

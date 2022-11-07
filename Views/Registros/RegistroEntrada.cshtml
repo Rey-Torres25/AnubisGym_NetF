@@ -1,13 +1,13 @@
-﻿
+﻿@model List<GymAnubisNetF.Models.TableViewModels.AsistenciaTableViewModel>
 @{
+    List<SelectListItem> clients = (List<SelectListItem>)ViewBag.clients;
     ViewBag.Title = "RegistroEntrada";
 }
 <div class="container mx-auto text-center" style="width: 400px;">
     <h2>Registro de asistencia</h2>
- </div>
+</div>
 
-<div class="row form-group">
-    @*date picker*@
+<div class="row form-group mb-4">
     <label for="date" class="col-sm-1 col-form-label">Date</label>
     <div class="col-sm-4">
         <div class="input-group date" id="datepicker">
@@ -19,72 +19,116 @@
             </span>
         </div>
     </div>
-    <div class="col-sm-4">
-        <div class="">
-            <button type="submit" class="btn btn-primary">Guardar</button>
+</div>
+
+<div class="container">
+    <div class="row" style="width: 100%;">
+        <div class="col-md-6 offset-md-3">
+            <div class="card text-center">
+                <div class="container m-1">
+                    <strong>Ingresa el ID o Nombre del cliente</strong>
+                </div>
+                <div class="container m-2">
+                    <label class="">Selecciona el cliente:</label>
+                    @Html.DropDownList("DropdownClientes", clients, "Selecciona una opcion", new { @class = "form-select d-inline align-items-center justify-content-center text-center", id = "Cliente" })
+                </div>
+                <div class="m-2">
+                    <button type="submit" onclick="AsistAdd()" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nombre cliente</th>
-            <th scope="col">Estatus</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th scope="row">1</th>
-            <td>Mark</td>
-            <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>--Select--</option>
-                    <option value="1">Presencia</option>
-                    <option value="2">Ausencia</option>
-                </select>
-            </td>
-           
-        </tr>
-        <tr>
-            <th scope="row">2</th>
-            <td>Jacob</td>
-            <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>--Select--</option>
-                    <option value="1">Presencia</option>
-                    <option value="2">Ausencia</option>
-                </select>
-            </td>
-       
-        </tr>
-        <tr>
-            <th scope="row">3</th>
-            <td>Larry the Bird</td>
-            <td>
-                <select class="form-select" aria-label="Default select example">
-                    <option selected>--Select--</option>
-                    <option value="1">Presencia</option>
-                    <option value="2">Ausencia</option>
-                </select>
-            </td>
-        </tr>
-    </tbody>
-</table>
 
 @section scripts{
+
+
+
+
     <script type="text/javascript">
         $(function () {
             $('#datepicker').datepicker({
-                "format": 'dd/mm/yyyy',
+                "format": 'yyyy/mm/dd',
                 "autoclose": true,
                 endDate: "0",
                 startDate: "0",
                 todayHighlight: true,
 
-                
+
             }).datepicker("setDate", "0");
         });
+    </script>
+    <script src="https://momentjs.com/downloads/moment.min.js"></script>
+    <script>
+        var url = "@Url.Content("~/Registros/RegistroEntrada")";
+            function AsistAdd() {
+             let cliente = document.getElementById("Cliente").value;
+            /*let cliente = document.getElementById("Cliente");*/
+            //Obtenemos el texto del dropdown
+            //let clienteText = cliente.options[cliente.selectedIndex].text;
+            //let asistenciaVal = document.getElementById("asistencia").value
+                var fecha = moment().format('yyyy-MM-DD');
+                var hora = moment().format('hh:mm a')
+                var fechaurl = moment().format('yyyyMMDD');
+            @*var name = new String("@Session["Nombre"]")*@
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify({
+                    idCliente: cliente,
+                    /*asistencia: asistenciaVal,*/
+                    fecha: fecha.toString(),
+                    hora: hora.toString()
+                    /*Date_Reclamacion: fecha.toString(),*/
+
+                }),
+                headers: {
+                    'Accept': "application/json",
+                    'Content-Type': "application/json"
+                }
+            }).then(function (response) {
+                if (response.ok)
+                    return response.text()
+                else
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Error al ejecutar',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+
+            }).then(function (Data) {
+                if (Data == "1") {
+                    document.location.href = "@Url.Content("~/Registros/RegistroAsistencia")";
+                     @*document.location.href = "@Url.Content("~/Registros/RegistroEntrada")" + "/" + fechaurl;*@
+                } else {
+                    /*alert(Data)*/
+                    Swal.fire({
+                        title: 'Error',
+                        text: Data,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+                }
+            });
+        }
+    </script>
+    <script>
+        var fecha = moment().format('yyyyMMDD');
+
+        function deleteFetch(id) {
+        if (confirm("¿Estas seguro de eliminarlo?")) {
+            url = "@Url.Content("~/Registros/DeleteRegistroAsistencia")"+"/"+id;
+            $.post(url, function (data) {
+                if (data == "1") {
+                    document.location.href = "@Url.Content("~/Registros/RegistroEntrada")" + "/" + fecha;
+                }
+                else
+                {
+                    alert("Ocurrio un error :(")
+                }
+            })
+        }
+    }
     </script>
 }

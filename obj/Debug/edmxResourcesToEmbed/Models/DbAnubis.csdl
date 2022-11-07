@@ -1,14 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Schema Namespace="AnubisGymNetFModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="AnubisGymNetFEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="asistencia" EntityType="AnubisGymNetFModel.asistencia" />
     <EntitySet Name="cliente" EntityType="AnubisGymNetFModel.cliente" />
     <EntitySet Name="producto" EntityType="AnubisGymNetFModel.producto" />
-    <EntitySet Name="registro_entrada" EntityType="AnubisGymNetFModel.registro_entrada" />
     <EntitySet Name="registro_equipo" EntityType="AnubisGymNetFModel.registro_equipo" />
     <EntitySet Name="status" EntityType="AnubisGymNetFModel.status" />
     <EntitySet Name="sysdiagrams" EntityType="AnubisGymNetFModel.sysdiagrams" />
     <EntitySet Name="user" EntityType="AnubisGymNetFModel.user" />
     <EntitySet Name="venta_prod" EntityType="AnubisGymNetFModel.venta_prod" />
+    <AssociationSet Name="FK_asistencia_cliente1" Association="AnubisGymNetFModel.FK_asistencia_cliente1">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="asistencia" EntitySet="asistencia" />
+    </AssociationSet>
     <AssociationSet Name="FK_cliente_status1" Association="AnubisGymNetFModel.FK_cliente_status1">
       <End Role="status" EntitySet="status" />
       <End Role="cliente" EntitySet="cliente" />
@@ -30,6 +34,16 @@
       <End Role="user" EntitySet="user" />
     </AssociationSet>
   </EntityContainer>
+  <EntityType Name="asistencia">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idCliente" Type="Int32" Nullable="false" />
+    <Property Name="fecha" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="hora" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="cliente" Relationship="AnubisGymNetFModel.FK_asistencia_cliente1" FromRole="asistencia" ToRole="cliente" />
+  </EntityType>
   <EntityType Name="cliente">
     <Key>
       <PropertyRef Name="id" />
@@ -43,6 +57,7 @@
     <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="idStatus" Type="Int32" Nullable="false" />
     <Property Name="idCompra" Type="Int32" />
+    <NavigationProperty Name="asistencia" Relationship="AnubisGymNetFModel.FK_asistencia_cliente1" FromRole="cliente" ToRole="asistencia" />
     <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="cliente" ToRole="status" />
     <NavigationProperty Name="venta_prod" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="cliente" ToRole="venta_prod" />
   </EntityType>
@@ -57,14 +72,6 @@
     <Property Name="fecha_registro" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="idStatus" Type="Int32" Nullable="false" />
     <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_producto_status" FromRole="producto" ToRole="status" />
-  </EntityType>
-  <EntityType Name="registro_entrada">
-    <Key>
-      <PropertyRef Name="id" />
-    </Key>
-    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="nombre_cliente" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="fecha_entrada" Type="DateTime" Nullable="false" Precision="0" />
   </EntityType>
   <EntityType Name="registro_equipo">
     <Key>
@@ -124,6 +131,18 @@
     <NavigationProperty Name="cliente1" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="venta_prod" ToRole="cliente" />
     <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_venta_prod" FromRole="venta_prod" ToRole="user" />
   </EntityType>
+  <Association Name="FK_asistencia_cliente1">
+    <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="1" />
+    <End Type="AnubisGymNetFModel.asistencia" Role="asistencia" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="asistencia">
+        <PropertyRef Name="idCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_cliente_status1">
     <End Type="AnubisGymNetFModel.status" Role="status" Multiplicity="1" />
     <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="*" />

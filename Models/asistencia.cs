@@ -12,10 +12,13 @@ namespace GymAnubisNetF.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class registro_entrada
+    public partial class asistencia
     {
         public int id { get; set; }
-        public string nombre_cliente { get; set; }
-        public System.DateTime fecha_entrada { get; set; }
+        public int idCliente { get; set; }
+        public string fecha { get; set; }
+        public string hora { get; set; }
+    
+        public virtual cliente cliente { get; set; }
     }
 }

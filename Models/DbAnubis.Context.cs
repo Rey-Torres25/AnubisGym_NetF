@@ -25,9 +25,9 @@ namespace GymAnubisNetF.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<asistencia> asistencia { get; set; }
         public virtual DbSet<cliente> cliente { get; set; }
         public virtual DbSet<producto> producto { get; set; }
-        public virtual DbSet<registro_entrada> registro_entrada { get; set; }
         public virtual DbSet<registro_equipo> registro_equipo { get; set; }
         public virtual DbSet<status> status { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }

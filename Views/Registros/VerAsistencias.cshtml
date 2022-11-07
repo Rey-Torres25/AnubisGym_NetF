@@ -1,16 +1,14 @@
-﻿@model List<GymAnubisNetF.Models.TableViewModels.ClienteTableViewModel>
+﻿@model List<GymAnubisNetF.Models.TableViewModels.AsistenciaTableViewModel>
 @{
-    ViewBag.Title = "Registro Cliente";
+    ViewBag.Title = "VerAsistencias";
 }
 
+
+
 <div class="container mx-auto text-center" style="width: 400px;">
-    <h2>Clientes</h2>
+    <h2>Lista de Asistencias</h2>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/AddRegistroCliente")'" value="Agregar cliente" />
-    </div>
-</div>
+
 <div class="container m-2">
     <div class="row">
         <div class="col-sm-4 m-1">
@@ -26,10 +24,10 @@
                 <tr>
 
                     <th>Id</th>
+                    <th>IdCliente</th>
                     <th>Cliente</th>
-                    <th>Correo</th>
-                    <th>Fecha del registro</th>
-                    <th></th>
+                    <th>Fecha</th>
+                    <th>Hora de entrada</th>
 
                 </tr>
             </thead>
@@ -38,16 +36,17 @@
                 {
                     <tr>
                         <th>@oItem.Id</th>
-                        <td>@oItem.Nombre</td>
-                        <td>@oItem.Correo</td>
-                        <td>@oItem.FechaRegistro</td>
-                        <td>
-                            <div class="container">
-                                <input type="button" class="btn btn-primary m-1" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRegistroCliente/"+oItem.Id)'" />
-                                <input type="button" class="btn btn-danger m-1" value="Eliminar" onclick="deleteFetch(@oItem.Id);" />
-                            </div>
+                        <td>@oItem.IdCliente</td>
+                        <td>@oItem.NombreCliente</td>
+                        <td>@oItem.Fecha</td>
+                        <td>@oItem.Hora</td>
+                        @*<td>
+                                <div class="container">
+                                    <input type="button" class="btn btn-primary m-1" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRegistroCliente/"+oItem.Id)'" />
+                                    <input type="button" class="btn btn-danger m-1" value="Eliminar" onclick="deleteFetch(@oItem.Id);" />
+                                </div>
 
-                        </td>
+                            </td>*@
                     </tr>
                 }
             </tbody>
@@ -144,22 +143,4 @@
             });
         });
     </script>
-
-    <script>
-    function deleteFetch(id) {
-        if (confirm("¿Estas seguro de eliminarlo?")) {
-            url = "@Url.Content("~/Registros/DeleteRegistroCliente")"+"/"+id;
-            $.post(url, function (data) {
-                if (data == "1") {
-                    document.location.href = "@Url.Content("~/Registros/RegistroCliente")"
-                }
-                else
-                {
-                    alert("Ocurrio un error :(")
-                }
-            })
-        }
-    }
-    </script>
 }
-
