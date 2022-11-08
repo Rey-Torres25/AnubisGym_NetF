@@ -55,6 +55,16 @@
           <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="statusname" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="suscripcion_mensual">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="idCliente" Type="int" Nullable="false" />
+          <Property Name="fecha_inicio" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="fecha_fin" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="pago_mensual" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
             <PropertyRef Name="diagram_id" />
@@ -138,6 +148,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_suscripcion_mensual_cliente">
+          <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+          <End Role="suscripcion_mensual" Type="Self.suscripcion_mensual" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suscripcion_mensual">
+              <PropertyRef Name="idCliente" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_user_status">
           <End Role="status" Type="Self.status" Multiplicity="1" />
           <End Role="user" Type="Self.user" Multiplicity="*" />
@@ -168,6 +190,7 @@
           <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="registro_equipo" EntityType="Self.registro_equipo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="suscripcion_mensual" EntityType="Self.suscripcion_mensual" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="venta_prod" EntityType="Self.venta_prod" Schema="dbo" store:Type="Tables" />
@@ -186,6 +209,10 @@
           <AssociationSet Name="FK_producto_status" Association="Self.FK_producto_status">
             <End Role="status" EntitySet="status" />
             <End Role="producto" EntitySet="producto" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suscripcion_mensual_cliente" Association="Self.FK_suscripcion_mensual_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="suscripcion_mensual" EntitySet="suscripcion_mensual" />
           </AssociationSet>
           <AssociationSet Name="FK_user_status" Association="Self.FK_user_status">
             <End Role="status" EntitySet="status" />
@@ -206,6 +233,7 @@
           <EntitySet Name="producto" EntityType="AnubisGymNetFModel.producto" />
           <EntitySet Name="registro_equipo" EntityType="AnubisGymNetFModel.registro_equipo" />
           <EntitySet Name="status" EntityType="AnubisGymNetFModel.status" />
+          <EntitySet Name="suscripcion_mensual" EntityType="AnubisGymNetFModel.suscripcion_mensual" />
           <EntitySet Name="sysdiagrams" EntityType="AnubisGymNetFModel.sysdiagrams" />
           <EntitySet Name="user" EntityType="AnubisGymNetFModel.user" />
           <EntitySet Name="venta_prod" EntityType="AnubisGymNetFModel.venta_prod" />
@@ -220,6 +248,10 @@
           <AssociationSet Name="FK_cliente_venta_prod" Association="AnubisGymNetFModel.FK_cliente_venta_prod">
             <End Role="venta_prod" EntitySet="venta_prod" />
             <End Role="cliente" EntitySet="cliente" />
+          </AssociationSet>
+          <AssociationSet Name="FK_suscripcion_mensual_cliente" Association="AnubisGymNetFModel.FK_suscripcion_mensual_cliente">
+            <End Role="cliente" EntitySet="cliente" />
+            <End Role="suscripcion_mensual" EntitySet="suscripcion_mensual" />
           </AssociationSet>
           <AssociationSet Name="FK_producto_status" Association="AnubisGymNetFModel.FK_producto_status">
             <End Role="status" EntitySet="status" />
@@ -260,6 +292,7 @@
           <NavigationProperty Name="asistencia" Relationship="AnubisGymNetFModel.FK_asistencia_cliente1" FromRole="cliente" ToRole="asistencia" />
           <NavigationProperty Name="status" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="cliente" ToRole="status" />
           <NavigationProperty Name="venta_prod" Relationship="AnubisGymNetFModel.FK_cliente_venta_prod" FromRole="cliente" ToRole="venta_prod" />
+          <NavigationProperty Name="suscripcion_mensual" Relationship="AnubisGymNetFModel.FK_suscripcion_mensual_cliente" FromRole="cliente" ToRole="suscripcion_mensual" />
         </EntityType>
         <EntityType Name="producto">
           <Key>
@@ -291,6 +324,17 @@
           <NavigationProperty Name="cliente" Relationship="AnubisGymNetFModel.FK_cliente_status1" FromRole="status" ToRole="cliente" />
           <NavigationProperty Name="producto" Relationship="AnubisGymNetFModel.FK_producto_status" FromRole="status" ToRole="producto" />
           <NavigationProperty Name="user" Relationship="AnubisGymNetFModel.FK_user_status" FromRole="status" ToRole="user" />
+        </EntityType>
+        <EntityType Name="suscripcion_mensual">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="idCliente" Type="Int32" Nullable="false" />
+          <Property Name="fecha_inicio" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="fecha_fin" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="pago_mensual" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="cliente" Relationship="AnubisGymNetFModel.FK_suscripcion_mensual_cliente" FromRole="suscripcion_mensual" ToRole="cliente" />
         </EntityType>
         <EntityType Name="sysdiagrams">
           <Key>
@@ -364,6 +408,18 @@
             </Principal>
             <Dependent Role="cliente">
               <PropertyRef Name="idCompra" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_suscripcion_mensual_cliente">
+          <End Type="AnubisGymNetFModel.cliente" Role="cliente" Multiplicity="1" />
+          <End Type="AnubisGymNetFModel.suscripcion_mensual" Role="suscripcion_mensual" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cliente">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="suscripcion_mensual">
+              <PropertyRef Name="idCliente" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -460,6 +516,17 @@
             <EntityTypeMapping TypeName="AnubisGymNetFModel.status">
               <MappingFragment StoreEntitySet="status">
                 <ScalarProperty Name="statusname" ColumnName="statusname" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="suscripcion_mensual">
+            <EntityTypeMapping TypeName="AnubisGymNetFModel.suscripcion_mensual">
+              <MappingFragment StoreEntitySet="suscripcion_mensual">
+                <ScalarProperty Name="pago_mensual" ColumnName="pago_mensual" />
+                <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+                <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+                <ScalarProperty Name="idCliente" ColumnName="idCliente" />
                 <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>

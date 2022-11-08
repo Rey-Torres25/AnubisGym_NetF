@@ -19,17 +19,36 @@ namespace GymAnubisNetF.Controllers
 
             using (AnubisGymNetFEntities db = new AnubisGymNetFEntities())
             {
-                lst = (from d in db.cliente
-                       where d.idStatus == 1
+                //lst = (from d in db.cliente
+                //       where d.idStatus == 1
+                //       select new ClienteTableViewModel
+                //       {
+                //           Id = d.id,
+                //           Nombre = d.nombre,
+                //           Edad = d.edad,
+                //           Correo = d.correo,
+                //           Telefono = d.telefono,
+                //           Direccion = d.direccion,
+                //           FechaRegistro = d.fecha_registro
+                //       }).ToList();
+                //var Tiempo = DateTime.Now.ToString("yyyy-MM-dd");
+                //string TiempoString = Convert.ToString(Tiempo);
+                lst = (from c in db.cliente
+                       join s in db.suscripcion_mensual
+                       on c.id equals s.idCliente
+                       where c.idStatus == 1 
                        select new ClienteTableViewModel
                        {
-                           Id = d.id,
-                           Nombre = d.nombre,
-                           Edad = d.edad,
-                           Correo = d.correo,
-                           Telefono = d.telefono,
-                           Direccion = d.direccion,
-                           FechaRegistro = d.fecha_registro
+                           Id = c.id,
+                           Nombre = c.nombre,
+                           Edad = c.edad,
+                           Correo = c.correo,
+                           Telefono = c.telefono,
+                           Direccion = c.direccion,
+                           FechaRegistro = c.fecha_registro,
+                           FechaInicio = s.fecha_inicio,
+                           FechaFin = s.fecha_fin,
+                           PagoMensual = s.pago_mensual
                        }).ToList();
             }
             int CountCustomer = lst.Count();
@@ -311,15 +330,30 @@ namespace GymAnubisNetF.Controllers
             //HoraHoy = model.Hora;
             using (var db = new AnubisGymNetFEntities())
             {
-                var GetUser = (from d in db.asistencia
-                               where d.idCliente == model.IdCliente && d.fecha == FechaHoy
-                               select d).ToList();
-
-                if (model.IdCliente == GetUser[0].idCliente || GetUser[0].fecha == model.Fecha) //Eliminar este if
+                try
                 {
-                    return Content("No se puede registrar más de dos veces al día");
+                    var GetUser = (from d in db.asistencia
+                                   where d.idCliente == model.IdCliente && d.fecha == FechaHoy
+                                   select d).ToList();
+
+                    if (model.IdCliente == GetUser[0].idCliente! && model.Fecha == GetUser[0].fecha!) //Eliminar este if
+                    {
+                        return Content("No se puede registrar más de dos veces al día");
+                    }
+                    else
+                    {
+                        asistencia oAsist = new asistencia();
+                        //oAsist.nombre = model.Nombre;
+                        oAsist.idCliente = model.IdCliente;
+                        oAsist.fecha = model.Fecha;
+                        oAsist.hora = model.Hora;
+                        //oAsist.asistencia1 = model.Asistencia;
+
+                        db.asistencia.Add(oAsist);
+                        db.SaveChanges();
+                    }
                 }
-                else
+                catch
                 {
                     asistencia oAsist = new asistencia();
                     //oAsist.nombre = model.Nombre;
@@ -331,6 +365,8 @@ namespace GymAnubisNetF.Controllers
                     db.asistencia.Add(oAsist);
                     db.SaveChanges();
                 }
+
+
 
             }
 
@@ -377,6 +413,60 @@ namespace GymAnubisNetF.Controllers
                 db.SaveChanges();
             }
 
+            return Content("1");
+        }
+
+        [HttpGet]
+        public ActionResult RenovacionMensual()
+        {
+            List<ClienteViewModel> lst = null;
+
+            using (var db = new AnubisGymNetFEntities())
+            {
+                lst = (from d in db.cliente
+                       select new ClienteViewModel
+                       {
+                           Nombre = d.nombre,
+                           Id = d.id
+                       }).ToList();
+            }
+
+            List<SelectListItem> clients = lst.ConvertAll(d =>
+            {
+                return new SelectListItem()
+                {
+                    Text = d.Id + " - " + d.Nombre.ToString(),
+                    Value = d.Id.ToString(),
+                    Selected = false,
+                };
+            });
+            ViewBag.clients = clients;
+            return View();
+        }
+        [HttpPost]
+        public ActionResult RenovacionMensual(SuscripcionViewModel model)
+        {
+            using (var db = new AnubisGymNetFEntities())
+            {
+                if (model.PagoMensual <= 0)
+                {
+                    return Content("No se pueden agregar valores nulos o en 0");
+                }
+                else
+                {
+                    suscripcion_mensual oSM = new suscripcion_mensual();
+                    //oAsist.nombre = model.Nombre;
+                    oSM.idCliente = model.IdCliente;
+                    oSM.fecha_inicio = model.FechaInicio;
+                    oSM.fecha_fin = model.FechaFinal;
+                    oSM.pago_mensual = model.PagoMensual;
+                    //oAsist.asistencia1 = model.Asistencia;
+                    db.suscripcion_mensual.Add(oSM);
+                    db.SaveChanges();
+                }
+            }
+
+            //return View();
             return Content("1");
         }
 

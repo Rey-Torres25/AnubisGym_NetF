@@ -14,5 +14,9 @@ namespace GymAnubisNetF.Models.TableViewModels
         public string Telefono { get; set; }
         public string Direccion { get; set; }
         public string FechaRegistro { get; set; }
+
+        public string FechaInicio { get; set; }
+        public string FechaFin { get; set; }
+        public int PagoMensual { get; set; }
     }
 }

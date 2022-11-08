@@ -56,6 +56,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="suscripcion_mensual">
+      <EntityTypeMapping TypeName="AnubisGymNetFModel.suscripcion_mensual">
+        <MappingFragment StoreEntitySet="suscripcion_mensual">
+          <ScalarProperty Name="pago_mensual" ColumnName="pago_mensual" />
+          <ScalarProperty Name="fecha_fin" ColumnName="fecha_fin" />
+          <ScalarProperty Name="fecha_inicio" ColumnName="fecha_inicio" />
+          <ScalarProperty Name="idCliente" ColumnName="idCliente" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="sysdiagrams">
       <EntityTypeMapping TypeName="AnubisGymNetFModel.sysdiagrams">
         <MappingFragment StoreEntitySet="sysdiagrams">

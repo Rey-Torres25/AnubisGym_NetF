@@ -7,8 +7,11 @@
     <h2>Clientes</h2>
 </div>
 <div class="row">
-    <div class="col-md-12">
-        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/AddRegistroCliente")'" value="Agregar cliente" />
+    <div class="col-xl-2">
+        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/AddRegistroCliente")'" value="Registrar cliente" />
+    </div>
+    <div class="col-xl-2">
+        <input type="button" class="btn btn-primary mb-2" onclick="document.location.href = '@Url.Content("~/Registros/RenovacionMensual")'" value="Renovar plan" />
     </div>
 </div>
 <div class="container m-2">
@@ -29,6 +32,9 @@
                     <th>Cliente</th>
                     <th>Correo</th>
                     <th>Fecha del registro</th>
+                    <th>Fecha de inicio</th>
+                    <th>Fecha de fin</th>
+                    <th>Pago</th>
                     <th></th>
 
                 </tr>
@@ -41,6 +47,9 @@
                         <td>@oItem.Nombre</td>
                         <td>@oItem.Correo</td>
                         <td>@oItem.FechaRegistro</td>
+                        <td>@oItem.FechaInicio</td>
+                        <td>@oItem.FechaFin</td>
+                        <td>@oItem.PagoMensual</td>
                         <td>
                             <div class="container">
                                 <input type="button" class="btn btn-primary m-1" value="Editar" onclick="document.location.href = '@Url.Content("~/Registros/EditRegistroCliente/"+oItem.Id)'" />

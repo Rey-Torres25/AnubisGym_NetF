@@ -15,6 +15,7 @@
     <RootNamespace>GymAnubisNetF</RootNamespace>
     <AssemblyName>GymAnubisNetF</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <LangVersion>8.0</LangVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>true</UseIISExpress>
     <Use64BitIISExpress />
@@ -170,6 +171,9 @@
     <Compile Include="Models\status.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\suscripcion_mensual.cs">
+      <DependentUpon>DbAnubis.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\sysdiagrams.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
@@ -177,6 +181,7 @@
     <Compile Include="Models\TableViewModels\ClienteTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\ProductoTableViewModel.cs" />
     <Compile Include="Models\TableViewModels\UserTableViewModel.cs" />
+    <Compile Include="Models\TableViewModels\VentaProductoTableViewModel.cs" />
     <Compile Include="Models\user.cs">
       <DependentUpon>DbAnubis.tt</DependentUpon>
     </Compile>
@@ -186,6 +191,7 @@
     <Compile Include="Models\ViewModels\AsistenciaViewModel.cs" />
     <Compile Include="Models\ViewModels\ClienteViewModel.cs" />
     <Compile Include="Models\ViewModels\ProductoViewModel.cs" />
+    <Compile Include="Models\ViewModels\SuscripcionViewModel.cs" />
     <Compile Include="Models\ViewModels\UserViewModel.cs" />
     <Compile Include="Models\ViewModels\VentaProdViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -306,6 +312,7 @@
     <Content Include="Views\Productos\EditProducto.cshtml" />
     <Content Include="Views\Registros\RegistroAsistencia.cshtml" />
     <Content Include="Views\Registros\VerAsistencias.cshtml" />
+    <Content Include="Views\Registros\RenovacionMensual.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

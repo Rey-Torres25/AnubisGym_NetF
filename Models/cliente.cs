@@ -18,6 +18,7 @@ namespace GymAnubisNetF.Models
         public cliente()
         {
             this.asistencia = new HashSet<asistencia>();
+            this.suscripcion_mensual = new HashSet<suscripcion_mensual>();
         }
     
         public int id { get; set; }
@@ -34,5 +35,7 @@ namespace GymAnubisNetF.Models
         public virtual ICollection<asistencia> asistencia { get; set; }
         public virtual status status { get; set; }
         public virtual venta_prod venta_prod { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<suscripcion_mensual> suscripcion_mensual { get; set; }
     }
 }

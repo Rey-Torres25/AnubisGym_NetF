@@ -50,6 +50,16 @@
     <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="statusname" Type="varchar" MaxLength="50" />
   </EntityType>
+  <EntityType Name="suscripcion_mensual">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idCliente" Type="int" Nullable="false" />
+    <Property Name="fecha_inicio" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="fecha_fin" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="pago_mensual" Type="int" Nullable="false" />
+  </EntityType>
   <EntityType Name="sysdiagrams">
     <Key>
       <PropertyRef Name="diagram_id" />
@@ -133,6 +143,18 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_suscripcion_mensual_cliente">
+    <End Role="cliente" Type="Self.cliente" Multiplicity="1" />
+    <End Role="suscripcion_mensual" Type="Self.suscripcion_mensual" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="cliente">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="suscripcion_mensual">
+        <PropertyRef Name="idCliente" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_user_status">
     <End Role="status" Type="Self.status" Multiplicity="1" />
     <End Role="user" Type="Self.user" Multiplicity="*" />
@@ -163,6 +185,7 @@
     <EntitySet Name="producto" EntityType="Self.producto" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="registro_equipo" EntityType="Self.registro_equipo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="status" EntityType="Self.status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="suscripcion_mensual" EntityType="Self.suscripcion_mensual" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="user" EntityType="Self.user" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="venta_prod" EntityType="Self.venta_prod" Schema="dbo" store:Type="Tables" />
@@ -181,6 +204,10 @@
     <AssociationSet Name="FK_producto_status" Association="Self.FK_producto_status">
       <End Role="status" EntitySet="status" />
       <End Role="producto" EntitySet="producto" />
+    </AssociationSet>
+    <AssociationSet Name="FK_suscripcion_mensual_cliente" Association="Self.FK_suscripcion_mensual_cliente">
+      <End Role="cliente" EntitySet="cliente" />
+      <End Role="suscripcion_mensual" EntitySet="suscripcion_mensual" />
     </AssociationSet>
     <AssociationSet Name="FK_user_status" Association="Self.FK_user_status">
       <End Role="status" EntitySet="status" />

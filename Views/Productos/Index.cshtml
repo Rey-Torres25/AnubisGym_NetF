@@ -1,4 +1,4 @@
-﻿
+﻿@model List<GymAnubisNetF.Models.TableViewModels.VentaProductoTableViewModel>
 @{
     ViewBag.Title = "Index";
 }
@@ -34,13 +34,27 @@
             <thead>
                 <tr>
                     <th>Id producto</th>
-                    <th>Nombre</th>
+                    <th>Nombre cliente</th>
+                    <th>Producto</th>
                     <th>Cantidad</th>
                     <th>Precio</th>
                     <th>Fecha de venta</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
+                @foreach (var oVD in Model)
+                {
+                    <tr>
+                        <th>@oVD.Id</th>
+                        <td>@oVD.Cliente</td>
+                        <td>@oVD.Producto</td>
+                        <td>@oVD.Cantidad</td>
+                        <td>@oVD.Precio</td>
+                        <td>@oVD.FechaCompra</td>
+                        <td>@oVD.Total</td>
+                    </tr>
+                }
             </tbody>
         </table>
     </div>
@@ -64,75 +78,75 @@
     <script src="https://cdn.datatables.net/plug-ins/1.10.21/dataRender/datetime.js"></script>
 
     <script>
-    var minDate, maxDate;
+        var minDate, maxDate;
 
-    $.fn.dataTable.ext.search.push(
-        function (settings, data, dataIndex) {
-            var min = minDate.val();
-            var max = maxDate.val();
-            var date = new Date(data[4]); // use data for the date column
+        $.fn.dataTable.ext.search.push(
+            function (settings, data, dataIndex) {
+                var min = minDate.val();
+                var max = maxDate.val();
+                var date = new Date(data[5]); // use data for the date column
 
-            if (
-                (min === null && max === null) ||
-                (min === null && date <= max) ||
-                (min <= date && max === null) ||
-                (min <= date && date <= max)
-            ) {
-                return true;
+                if (
+                    (min === null && max === null) ||
+                    (min === null && date <= max) ||
+                    (min <= date && max === null) ||
+                    (min <= date && date <= max)
+                ) {
+                    return true;
+                }
+                return false;
             }
-            return false;
-        }
-    );
+        );
         $(document).ready(function () {
-        minDate = new DateTime($('#min'), {
-            format: 'YYYY-MM-DD'
-        });
-        maxDate = new DateTime($('#max'), {
-            format: 'YYYY-MM-DD'
-        });
+            minDate = new DateTime($('#min'), {
+                format: 'YYYY-MM-DD'
+            });
+            maxDate = new DateTime($('#max'), {
+                format: 'YYYY-MM-DD'
+            });
             var table = $('#Lista_tabla').DataTable({
                 "language": {
                     "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
                 },
-            responsive: "true",
-            dom: 'Blfrtip',
-            //columnDefs: [{
-            //    render: $.fn.dataTable.render.moment('yyyy-MM-DD HH:mm:ss.SSS', 'YYYY-MM-DD'),
-            //    targets: 4
-            //}],
-            buttons: [
-                //'csv', 'excel', 'pdf',
-                //'copyHtml5',
-                'excelHtml5',
-                //'csvHtml5',
-                'pdfHtml5'
-                //{ extend: 'pdf', text: '<i class="fas fa-file-pdf fa-1x" aria-hidden="true"> Exportar a PDF</i>' },
-                //{ extend: 'csv', text: '<i class="fas fa-file-csv fa-1x"> Exportar a CSV</i>' },
-                //{ extend: 'excel', text: '<i class="fas fa-file-excel" aria-hidden="true"> Exportar a EXCEL</i>' },
-                ////{
-                //    extend: 'excelHtml5',
-                //    text: '<i class="fa fa-file-excel-o"></i>',
-                //    titleAttr: 'Excel',
-                //    class: 'dt-button buttons-excel buttons-html5',
-                //},
-                //{
-                //    extend: 'csvHtml5',
-                //    text: '<i class="fa fa-file-text-o"></i>',
-                //    titleAttr: 'CSV'
-                //},
-                //{
-                //    extend: 'pdfHtml5',
-                //    text: '<i class="fa fa-file-pdf-o"></i>',
-                //    titleAttr: 'PDF'
-                //}
-            ]
-        });
+                responsive: "true",
+                dom: 'Blfrtip',
+                //columnDefs: [{
+                //    render: $.fn.dataTable.render.moment('yyyy-MM-DD HH:mm:ss.SSS', 'YYYY-MM-DD'),
+                //    targets: 4
+                //}],
+                buttons: [
+                    //'csv', 'excel', 'pdf',
+                    //'copyHtml5',
+                    'excelHtml5',
+                    //'csvHtml5',
+                    'pdfHtml5'
+                    //{ extend: 'pdf', text: '<i class="fas fa-file-pdf fa-1x" aria-hidden="true"> Exportar a PDF</i>' },
+                    //{ extend: 'csv', text: '<i class="fas fa-file-csv fa-1x"> Exportar a CSV</i>' },
+                    //{ extend: 'excel', text: '<i class="fas fa-file-excel" aria-hidden="true"> Exportar a EXCEL</i>' },
+                    ////{
+                    //    extend: 'excelHtml5',
+                    //    text: '<i class="fa fa-file-excel-o"></i>',
+                    //    titleAttr: 'Excel',
+                    //    class: 'dt-button buttons-excel buttons-html5',
+                    //},
+                    //{
+                    //    extend: 'csvHtml5',
+                    //    text: '<i class="fa fa-file-text-o"></i>',
+                    //    titleAttr: 'CSV'
+                    //},
+                    //{
+                    //    extend: 'pdfHtml5',
+                    //    text: '<i class="fa fa-file-pdf-o"></i>',
+                    //    titleAttr: 'PDF'
+                    //}
+                ]
+            });
 
-        // Event listener to the two range filtering inputs to redraw on input
-        $('#min, #max').on('change', function () {
-            table.draw();
+            // Event listener to the two range filtering inputs to redraw on input
+            $('#min, #max').on('change', function () {
+                table.draw();
+            });
         });
-    });
     </script>
 }
 

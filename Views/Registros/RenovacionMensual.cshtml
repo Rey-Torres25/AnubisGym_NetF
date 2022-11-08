@@ -1,0 +1,201 @@
+﻿
+@{
+    List<SelectListItem> clients = (List<SelectListItem>)ViewBag.clients;
+    ViewBag.Title = "Renovacion Mensual";
+}
+<div class="container mx-auto text-center" style="width: 500px;">
+    <h2>Renovacion Mensual</h2>
+</div>
+
+<div class="row" style="width: 100%;">
+    <div class="col-md-6 offset-md-3">
+        <div class="card text-center">
+            <div class="container">
+                <div class="row g-2 align-items-center m-3">
+                    <div class="col-auto">
+                        <label class="col-form-label">Fecha:</label>
+                    </div>
+                    <div class="input-group date" id="datepicker">
+                        <input type="text" style="Text-align:Center;" class="form-control" readonly>
+                        <span class="input-group-append">
+                            <span class="input-group-text bg-white d-block">
+                                <i class="fa fa-calendar"></i>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="container m-1">
+                    <strong>Ingresa el ID o Nombre del cliente</strong>
+                </div>
+                <div class="container m-2">
+                    <label>Selecciona el cliente:</label>
+                    @Html.DropDownList("DropdownClientes", clients,@*"Selecciona una opcion",*@new { @class = "form-select d-inline align-items-center justify-content-center text-center", id = "Cliente" })
+                </div>
+            </div>
+            <div class="container">
+                <div class="row justify-content-evenly m-1 text-center flex">
+
+                    <div class="col-6">
+                        <div class="col-auto">
+                            <label class="col-form-label">Fecha de inicio:</label>
+                        </div>
+                        <div class="input-group date" id="datepickerStart">
+                            <input type="text" style="Text-align:Center;" class="form-control" id="dS" disabled>
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="col-auto">
+                            <label class="col-form-label">Fecha de fin:</label>
+                        </div>
+                        <div class="input-group date" id="datepickerEnd">
+                            <input type="text" style="Text-align:Center;" class="form-control" id="dE" disabled>
+                            <span class="input-group-append">
+                                <span class="input-group-text bg-white d-block">
+                                    <i class="fa fa-calendar"></i>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="container">
+                        <div class="container m-1">
+                            <strong>Cuota mensual:</strong>
+                        </div>
+                        <div class="container m-1">
+                            <input id="Cantidad" type="number" pattern="^[1-9]\d*$" onkeypress="return soloNumeros(event);" class="form-select d-inline align-items-center justify-content-center text-center" style="Text-align:Center" min="1" step="1" value="">
+                        </div>
+                    </div>
+                    <div class="col-md-5 m-2">
+                        <input type="button" class="btn btn-primary" value="Renovar mes" onclick="Renew()" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts{
+    <script type="text/javascript">
+        $(function () {
+            $('#datepicker').datepicker({
+                "format": 'yyyy/mm/dd',
+                "autoclose": true,
+                endDate: "0",
+                startDate: "0",
+                todayHighlight: true,
+            }).datepicker("setDate", "0");
+        });
+    </script>
+    <script type="text/javascript">
+        $(function () {
+            $('#datepickerStart').datepicker({
+                "format": 'yyyy-mm-dd',
+                "autoclose": true,
+                endDate: "0",
+                startDate: "0",
+                todayHighlight: true,
+            }).datepicker("setDate", "0");
+        });
+    </script>
+    <script>
+        $(function () {
+            var todayDate = new Date();
+            todayDate.setDate(todayDate.getDate() + 30)
+
+            $('#datepickerEnd').datepicker({
+                "format": 'yyyy-mm-dd',
+                startDate: "+30",
+                setDate: 'today',
+            }).datepicker("setDate", todayDate);
+        });
+    </script>
+    <script>
+        let url = "@Url.Content("~/Registros/RenovacionMensual")";
+        function Renew() {
+            let cliente = document.getElementById("Cliente").value;
+
+
+            let DS = document.getElementById("dS").value;
+
+            let DE = document.getElementById("dE").value;
+
+            let CuotaMXN = document.getElementById("Cantidad").value;
+
+            fetch(url, {
+                method: "POST",
+                body: JSON.stringify({
+                    idCliente: cliente,
+                    fechaInicio: DS,
+                    fechaFinal: DE,
+                    pagomensual: CuotaMXN
+                }),
+                headers: {
+                    'Accept': "application/json",
+                    'Content-Type': "application/json"
+                }
+            }).then(function (response) {
+                if (response.ok)
+                    return response.text()
+                else
+                    Swal.fire({
+                        title: 'Error',
+                        text: 'Error al ejecutar',
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+            }).then(function (Data) {
+                if (Data == "1") {
+                    document.location.href = "@Url.Content("~/Registros/RegistroCliente")";
+                } else {
+                    /*alert(Data)*/
+                    Swal.fire({
+                        title: 'Error',
+                        text: Data,
+                        icon: 'error',
+                        confirmButtonText: 'Aceptar'
+                    })
+                }
+            });
+        }
+    </script>
+    <script>
+        /**
+         * Función que solo permite la entrada de numeros, un signo negativo y
+         * un punto para separar los decimales
+         */
+        function soloNumeros(e) {
+            // capturamos la tecla pulsada
+            var teclaPulsada = window.event ? window.event.keyCode : e.which;
+
+            // capturamos el contenido del input
+            var valor = document.getElementById("Cantidad").value;
+
+            // 45 = tecla simbolo menos (-)
+            // Si el usuario pulsa la tecla menos, y no se ha pulsado anteriormente
+            // Modificamos el contenido del mismo añadiendo el simbolo menos al
+            // inicio
+            if (teclaPulsada == 45 && valor.indexOf("-") == -1) {
+                document.getElementById("Cantidad").value = "" + valor;
+            }
+
+            // 13 = tecla enter
+            // 46 = tecla punto (.)
+            // Si el usuario pulsa la tecla enter o el punto y no hay ningun otro
+            // punto
+            if (teclaPulsada == 13 || (teclaPulsada == 46 && valor.indexOf(".") == -1)) {
+                return true;
+            }
+
+            // devolvemos true o false dependiendo de si es numerico o no
+            return /\d/.test(String.fromCharCode(teclaPulsada));
+        }
+    </script>
+}

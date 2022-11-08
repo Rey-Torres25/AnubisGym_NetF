@@ -14,12 +14,24 @@ namespace GymAnubisNetF.Controllers
         // GET: Productos
         public ActionResult Index()
         {
-            var lst = new List<ClienteViewModel>();
+            //var lst = new List<VentaProductoTableViewModel>();
+            List<VentaProductoTableViewModel> lst = null;
 
             //var Nombre = Session["Nombre"];
             using (var db = new AnubisGymNetFEntities())
-            { 
-                    
+            {
+                lst = (from d in db.venta_prod
+                       //where d.idStatus == 1
+                       select new VentaProductoTableViewModel
+                       {
+                           Id = d.id,
+                           Cliente = d.cliente,
+                           Producto = d.producto,
+                           Cantidad = d.cantidad,
+                           Precio = d.precio,
+                           FechaCompra = d.fecha,
+                           Total = d.total
+                       }).ToList();
             }
             return View(lst);
         }
@@ -51,11 +63,12 @@ namespace GymAnubisNetF.Controllers
             using (Models.AnubisGymNetFEntities db = new Models.AnubisGymNetFEntities())
             {
                 lst1 = (from d in db.producto
-                       select new ProductoViewModel
-                       {
-                           NombreProd = d.nombre,
-                           Precio = d.precio
-                       }).ToList();
+                        select new ProductoViewModel
+                        {
+                            NombreProd = d.nombre,
+                            Precio = d.precio,
+                            Id = d.id
+                        }).ToList();
             }
 
             List<SelectListItem> prods = lst1.ConvertAll(d =>
@@ -97,9 +110,9 @@ namespace GymAnubisNetF.Controllers
                 oProd.stock = model.Stock;
                 oProd.precio = model.Precio;
                 oProd.fecha_registro = TiempoString;
-                if (oProd.stock < 0 || oProd.precio <0)
+                if (oProd.stock < 0 || oProd.precio < 0)
                 {
-                     ViewBag.Alert = "No se pueden agregar valores menores a 0";
+                    ViewBag.Alert = "No se pueden agregar valores menores a 0";
                     /*Json("No se pueden agregar valores en 0");*/
                     return View("AddProducto");
                 }
@@ -190,7 +203,7 @@ namespace GymAnubisNetF.Controllers
                        }).ToList();
             }
             return View(lst);
-            
+
         }
         [HttpPost]
         public ActionResult ProductosPost(List<VentaProdViewModel> ventaprod)
@@ -204,24 +217,38 @@ namespace GymAnubisNetF.Controllers
                 {
 
                     var oProduct = new venta_prod();
+                    //int ProdStock;
                     //Convert.ToString(product.Numero_Pedido);
 
                     foreach (var product in ventaprod)
                     {
-                        if (product.Cantidad == null)
+                        int Cant = Int32.Parse(product.Cantidad);
+                        if (product.Cantidad == null || Cant == 0)
                         {
                             return Content("No se permiten agregar espacios vacios o espacios en blanco");
                         }
                         else
                         {
-                            oProduct.cliente = product.Cliente;
-                            oProduct.producto = product.Producto;
-                            oProduct.cantidad = product.Cantidad;
-                            oProduct.precio = product.Precio;
-                            oProduct.fecha = product.Fecha;
-                            oProduct.total = product.Total;
-                            db.venta_prod.Add(oProduct);
-                            db.SaveChanges();   
+                            var GetProd = db.producto.Single(d => d.nombre == product.Producto);
+                            GetProd.stock -= Int32.Parse(product.Cantidad);
+
+                            if (GetProd.stock <= 0)
+                            {
+                                return Content("Se exceden las existencias");
+                            }
+                            else
+                            {
+                                oProduct.cliente = product.Cliente;
+                                oProduct.producto = product.Producto;
+                                oProduct.cantidad = product.Cantidad;
+                                oProduct.precio = product.Precio;
+                                oProduct.fecha = product.Fecha;
+                                oProduct.total = product.Total;
+                                db.venta_prod.Add(oProduct);
+                                db.SaveChanges();
+                            }
+
+
                         }
                     }
                     return Content("1");
@@ -231,7 +258,7 @@ namespace GymAnubisNetF.Controllers
             {
                 return Content("No se puede enviar los productos");
             }
-        
+
         }
     }
 }

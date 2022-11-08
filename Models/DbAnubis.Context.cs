@@ -30,6 +30,7 @@ namespace GymAnubisNetF.Models
         public virtual DbSet<producto> producto { get; set; }
         public virtual DbSet<registro_equipo> registro_equipo { get; set; }
         public virtual DbSet<status> status { get; set; }
+        public virtual DbSet<suscripcion_mensual> suscripcion_mensual { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<user> user { get; set; }
         public virtual DbSet<venta_prod> venta_prod { get; set; }
